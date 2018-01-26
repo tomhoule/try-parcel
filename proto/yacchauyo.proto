@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+message Text {
+  string id = 1;
+  string title = 2;
+}
+
+message Texts {
+  repeated Text texts = 1;
+}
+
+message TextsQuery {
+  string title = 1;
+}
+
+service Yacchauyo {
+  rpc TextsIndex (TextsQuery) returns (Texts);
+}

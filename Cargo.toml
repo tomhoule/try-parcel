@@ -1,0 +1,9 @@
+[package]
+name = "yacchauyo"
+version = "0.1.0"
+authors = ["Tom Houlé <tom@tomhoule.com>"]
+
+[dependencies]
+futures = "*"
+grpcio = "=0.2"
+protobuf = "*"

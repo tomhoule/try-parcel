@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "react-router": "^4.2.0",
+    "tslint": "^5.9.1"
+  },
+  "dependencies": {
+    "@types/react-router-dom": "^4.2.3",
+    "react-router-dom": "^4.2.2"
+  }
+}
