@@ -6,7 +6,6 @@
         "moduleResolution": "node",
         "noImplicitAny": true,
         "noImplicitReturns": true,
-        "noUnusedLocalVariables": true,
         "plugins": [
             { "name": "tslint-language-service",
               "alwaysShowRuleFailuresAsWarnings": true
