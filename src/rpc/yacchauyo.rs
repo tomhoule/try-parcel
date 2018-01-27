@@ -26,6 +26,9 @@ pub struct Text {
     // message fields
     pub id: ::std::string::String,
     pub title: ::std::string::String,
+    pub slug: ::std::string::String,
+    pub authors: ::std::string::String,
+    pub description: ::std::string::String,
     // special fields
     unknown_fields: ::protobuf::UnknownFields,
     cached_size: ::protobuf::CachedSize,
@@ -116,6 +119,108 @@ impl Text {
     fn mut_title_for_reflect(&mut self) -> &mut ::std::string::String {
         &mut self.title
     }
+
+    // string slug = 3;
+
+    pub fn clear_slug(&mut self) {
+        self.slug.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_slug(&mut self, v: ::std::string::String) {
+        self.slug = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_slug(&mut self) -> &mut ::std::string::String {
+        &mut self.slug
+    }
+
+    // Take field
+    pub fn take_slug(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.slug, ::std::string::String::new())
+    }
+
+    pub fn get_slug(&self) -> &str {
+        &self.slug
+    }
+
+    fn get_slug_for_reflect(&self) -> &::std::string::String {
+        &self.slug
+    }
+
+    fn mut_slug_for_reflect(&mut self) -> &mut ::std::string::String {
+        &mut self.slug
+    }
+
+    // string authors = 4;
+
+    pub fn clear_authors(&mut self) {
+        self.authors.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_authors(&mut self, v: ::std::string::String) {
+        self.authors = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_authors(&mut self) -> &mut ::std::string::String {
+        &mut self.authors
+    }
+
+    // Take field
+    pub fn take_authors(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.authors, ::std::string::String::new())
+    }
+
+    pub fn get_authors(&self) -> &str {
+        &self.authors
+    }
+
+    fn get_authors_for_reflect(&self) -> &::std::string::String {
+        &self.authors
+    }
+
+    fn mut_authors_for_reflect(&mut self) -> &mut ::std::string::String {
+        &mut self.authors
+    }
+
+    // string description = 5;
+
+    pub fn clear_description(&mut self) {
+        self.description.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_description(&mut self, v: ::std::string::String) {
+        self.description = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_description(&mut self) -> &mut ::std::string::String {
+        &mut self.description
+    }
+
+    // Take field
+    pub fn take_description(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.description, ::std::string::String::new())
+    }
+
+    pub fn get_description(&self) -> &str {
+        &self.description
+    }
+
+    fn get_description_for_reflect(&self) -> &::std::string::String {
+        &self.description
+    }
+
+    fn mut_description_for_reflect(&mut self) -> &mut ::std::string::String {
+        &mut self.description
+    }
 }
 
 impl ::protobuf::Message for Text {
@@ -132,6 +237,15 @@ impl ::protobuf::Message for Text {
                 },
                 2 => {
                     ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.title)?;
+                },
+                3 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.slug)?;
+                },
+                4 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.authors)?;
+                },
+                5 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.description)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -151,6 +265,15 @@ impl ::protobuf::Message for Text {
         if !self.title.is_empty() {
             my_size += ::protobuf::rt::string_size(2, &self.title);
         }
+        if !self.slug.is_empty() {
+            my_size += ::protobuf::rt::string_size(3, &self.slug);
+        }
+        if !self.authors.is_empty() {
+            my_size += ::protobuf::rt::string_size(4, &self.authors);
+        }
+        if !self.description.is_empty() {
+            my_size += ::protobuf::rt::string_size(5, &self.description);
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -162,6 +285,15 @@ impl ::protobuf::Message for Text {
         }
         if !self.title.is_empty() {
             os.write_string(2, &self.title)?;
+        }
+        if !self.slug.is_empty() {
+            os.write_string(3, &self.slug)?;
+        }
+        if !self.authors.is_empty() {
+            os.write_string(4, &self.authors)?;
+        }
+        if !self.description.is_empty() {
+            os.write_string(5, &self.description)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -217,6 +349,21 @@ impl ::protobuf::MessageStatic for Text {
                     Text::get_title_for_reflect,
                     Text::mut_title_for_reflect,
                 ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "slug",
+                    Text::get_slug_for_reflect,
+                    Text::mut_slug_for_reflect,
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "authors",
+                    Text::get_authors_for_reflect,
+                    Text::mut_authors_for_reflect,
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "description",
+                    Text::get_description_for_reflect,
+                    Text::mut_description_for_reflect,
+                ));
                 ::protobuf::reflect::MessageDescriptor::new::<Text>(
                     "Text",
                     fields,
@@ -231,6 +378,9 @@ impl ::protobuf::Clear for Text {
     fn clear(&mut self) {
         self.clear_id();
         self.clear_title();
+        self.clear_slug();
+        self.clear_authors();
+        self.clear_description();
         self.unknown_fields.clear();
     }
 }
@@ -607,33 +757,48 @@ impl ::protobuf::reflect::ProtobufValue for TextsQuery {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x15proto/yacchauyo.proto\",\n\x04Text\x12\x0e\n\x02id\x18\x01\x20\x01\
-    (\tR\x02id\x12\x14\n\x05title\x18\x02\x20\x01(\tR\x05title\"$\n\x05Texts\
-    \x12\x1b\n\x05texts\x18\x01\x20\x03(\x0b2\x05.TextR\x05texts\"\"\n\nText\
-    sQuery\x12\x14\n\x05title\x18\x01\x20\x01(\tR\x05title2.\n\tYacchauyo\
-    \x12!\n\nTextsIndex\x12\x0b.TextsQuery\x1a\x06.TextsJ\xc0\x03\n\x06\x12\
-    \x04\0\0\x11\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\n\n\x02\x04\0\x12\x04\
-    \x02\0\x05\x01\n\n\n\x03\x04\0\x01\x12\x03\x02\x08\x0c\n\x0b\n\x04\x04\0\
-    \x02\0\x12\x03\x03\x02\x10\n\r\n\x05\x04\0\x02\0\x04\x12\x04\x03\x02\x02\
-    \x0e\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\x03\x02\x08\n\x0c\n\x05\x04\0\
-    \x02\0\x01\x12\x03\x03\t\x0b\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\x03\x0e\
-    \x0f\n\x0b\n\x04\x04\0\x02\x01\x12\x03\x04\x02\x13\n\r\n\x05\x04\0\x02\
-    \x01\x04\x12\x04\x04\x02\x03\x10\n\x0c\n\x05\x04\0\x02\x01\x05\x12\x03\
-    \x04\x02\x08\n\x0c\n\x05\x04\0\x02\x01\x01\x12\x03\x04\t\x0e\n\x0c\n\x05\
-    \x04\0\x02\x01\x03\x12\x03\x04\x11\x12\n\n\n\x02\x04\x01\x12\x04\x07\0\t\
-    \x01\n\n\n\x03\x04\x01\x01\x12\x03\x07\x08\r\n\x0b\n\x04\x04\x01\x02\0\
-    \x12\x03\x08\x02\x1a\n\x0c\n\x05\x04\x01\x02\0\x04\x12\x03\x08\x02\n\n\
-    \x0c\n\x05\x04\x01\x02\0\x06\x12\x03\x08\x0b\x0f\n\x0c\n\x05\x04\x01\x02\
-    \0\x01\x12\x03\x08\x10\x15\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x08\x18\
-    \x19\n\n\n\x02\x04\x02\x12\x04\x0b\0\r\x01\n\n\n\x03\x04\x02\x01\x12\x03\
-    \x0b\x08\x12\n\x0b\n\x04\x04\x02\x02\0\x12\x03\x0c\x02\x13\n\r\n\x05\x04\
-    \x02\x02\0\x04\x12\x04\x0c\x02\x0b\x14\n\x0c\n\x05\x04\x02\x02\0\x05\x12\
-    \x03\x0c\x02\x08\n\x0c\n\x05\x04\x02\x02\0\x01\x12\x03\x0c\t\x0e\n\x0c\n\
-    \x05\x04\x02\x02\0\x03\x12\x03\x0c\x11\x12\n\n\n\x02\x06\0\x12\x04\x0f\0\
-    \x11\x01\n\n\n\x03\x06\0\x01\x12\x03\x0f\x08\x11\n\x0b\n\x04\x06\0\x02\0\
-    \x12\x03\x10\x02.\n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x10\x06\x10\n\x0c\
-    \n\x05\x06\0\x02\0\x02\x12\x03\x10\x12\x1c\n\x0c\n\x05\x06\0\x02\0\x03\
-    \x12\x03\x10',b\x06proto3\
+    \n\x15proto/yacchauyo.proto\"|\n\x04Text\x12\x0e\n\x02id\x18\x01\x20\x01\
+    (\tR\x02id\x12\x14\n\x05title\x18\x02\x20\x01(\tR\x05title\x12\x12\n\x04\
+    slug\x18\x03\x20\x01(\tR\x04slug\x12\x18\n\x07authors\x18\x04\x20\x01(\t\
+    R\x07authors\x12\x20\n\x0bdescription\x18\x05\x20\x01(\tR\x0bdescription\
+    \"$\n\x05Texts\x12\x1b\n\x05texts\x18\x01\x20\x03(\x0b2\x05.TextR\x05tex\
+    ts\"\"\n\nTextsQuery\x12\x14\n\x05title\x18\x01\x20\x01(\tR\x05title2J\n\
+    \tYacchauyo\x12!\n\nTextsIndex\x12\x0b.TextsQuery\x1a\x06.Texts\x12\x1a\
+    \n\nCreateText\x12\x05.Text\x1a\x05.TextJ\xc9\x05\n\x06\x12\x04\0\0\x15\
+    \x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\n\n\x02\x06\0\x12\x04\x02\0\x05\
+    \x01\n\n\n\x03\x06\0\x01\x12\x03\x02\x08\x11\n\x0b\n\x04\x06\0\x02\0\x12\
+    \x03\x03\x02.\n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x03\x06\x10\n\x0c\n\
+    \x05\x06\0\x02\0\x02\x12\x03\x03\x12\x1c\n\x0c\n\x05\x06\0\x02\0\x03\x12\
+    \x03\x03',\n\x0b\n\x04\x06\0\x02\x01\x12\x03\x04\x02'\n\x0c\n\x05\x06\0\
+    \x02\x01\x01\x12\x03\x04\x06\x10\n\x0c\n\x05\x06\0\x02\x01\x02\x12\x03\
+    \x04\x12\x16\n\x0c\n\x05\x06\0\x02\x01\x03\x12\x03\x04!%\n\n\n\x02\x04\0\
+    \x12\x04\x07\0\r\x01\n\n\n\x03\x04\0\x01\x12\x03\x07\x08\x0c\n\x0b\n\x04\
+    \x04\0\x02\0\x12\x03\x08\x02\x10\n\r\n\x05\x04\0\x02\0\x04\x12\x04\x08\
+    \x02\x07\x0e\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\x08\x02\x08\n\x0c\n\x05\
+    \x04\0\x02\0\x01\x12\x03\x08\t\x0b\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\
+    \x08\x0e\x0f\n\x0b\n\x04\x04\0\x02\x01\x12\x03\t\x02\x13\n\r\n\x05\x04\0\
+    \x02\x01\x04\x12\x04\t\x02\x08\x10\n\x0c\n\x05\x04\0\x02\x01\x05\x12\x03\
+    \t\x02\x08\n\x0c\n\x05\x04\0\x02\x01\x01\x12\x03\t\t\x0e\n\x0c\n\x05\x04\
+    \0\x02\x01\x03\x12\x03\t\x11\x12\n\x0b\n\x04\x04\0\x02\x02\x12\x03\n\x02\
+    \x12\n\r\n\x05\x04\0\x02\x02\x04\x12\x04\n\x02\t\x13\n\x0c\n\x05\x04\0\
+    \x02\x02\x05\x12\x03\n\x02\x08\n\x0c\n\x05\x04\0\x02\x02\x01\x12\x03\n\t\
+    \r\n\x0c\n\x05\x04\0\x02\x02\x03\x12\x03\n\x10\x11\n\x0b\n\x04\x04\0\x02\
+    \x03\x12\x03\x0b\x02\x15\n\r\n\x05\x04\0\x02\x03\x04\x12\x04\x0b\x02\n\
+    \x12\n\x0c\n\x05\x04\0\x02\x03\x05\x12\x03\x0b\x02\x08\n\x0c\n\x05\x04\0\
+    \x02\x03\x01\x12\x03\x0b\t\x10\n\x0c\n\x05\x04\0\x02\x03\x03\x12\x03\x0b\
+    \x13\x14\n\x0b\n\x04\x04\0\x02\x04\x12\x03\x0c\x02\x19\n\r\n\x05\x04\0\
+    \x02\x04\x04\x12\x04\x0c\x02\x0b\x15\n\x0c\n\x05\x04\0\x02\x04\x05\x12\
+    \x03\x0c\x02\x08\n\x0c\n\x05\x04\0\x02\x04\x01\x12\x03\x0c\t\x14\n\x0c\n\
+    \x05\x04\0\x02\x04\x03\x12\x03\x0c\x17\x18\n\n\n\x02\x04\x01\x12\x04\x0f\
+    \0\x11\x01\n\n\n\x03\x04\x01\x01\x12\x03\x0f\x08\r\n\x0b\n\x04\x04\x01\
+    \x02\0\x12\x03\x10\x02\x1a\n\x0c\n\x05\x04\x01\x02\0\x04\x12\x03\x10\x02\
+    \n\n\x0c\n\x05\x04\x01\x02\0\x06\x12\x03\x10\x0b\x0f\n\x0c\n\x05\x04\x01\
+    \x02\0\x01\x12\x03\x10\x10\x15\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x10\
+    \x18\x19\n\n\n\x02\x04\x02\x12\x04\x13\0\x15\x01\n\n\n\x03\x04\x02\x01\
+    \x12\x03\x13\x08\x12\n\x0b\n\x04\x04\x02\x02\0\x12\x03\x14\x02\x13\n\r\n\
+    \x05\x04\x02\x02\0\x04\x12\x04\x14\x02\x13\x14\n\x0c\n\x05\x04\x02\x02\0\
+    \x05\x12\x03\x14\x02\x08\n\x0c\n\x05\x04\x02\x02\0\x01\x12\x03\x14\t\x0e\
+    \n\x0c\n\x05\x04\x02\x02\0\x03\x12\x03\x14\x11\x12b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

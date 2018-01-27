@@ -26,4 +26,5 @@ diesel-print-schema:
 test:
   DATABASE_URL="postgres://postgres@localhost:5432/yacchauyo_test" \
     diesel database reset
-  cargo test
+  YACCHAUYO_DATABASE_URL="postgres://postgres@localhost:5432/yacchauyo_test" \
+    cargo test

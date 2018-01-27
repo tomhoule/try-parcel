@@ -62,7 +62,10 @@ proto.Text.prototype.toObject = function(opt_includeInstance) {
 proto.Text.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    title: jspb.Message.getFieldWithDefault(msg, 2, "")
+    title: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    slug: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    authors: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    description: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -107,6 +110,18 @@ proto.Text.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setTitle(value);
       break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSlug(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAuthors(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDescription(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -150,6 +165,27 @@ proto.Text.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getSlug();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getAuthors();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = message.getDescription();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
 };
 
 
@@ -180,6 +216,51 @@ proto.Text.prototype.getTitle = function() {
 /** @param {string} value */
 proto.Text.prototype.setTitle = function(value) {
   jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string slug = 3;
+ * @return {string}
+ */
+proto.Text.prototype.getSlug = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/** @param {string} value */
+proto.Text.prototype.setSlug = function(value) {
+  jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string authors = 4;
+ * @return {string}
+ */
+proto.Text.prototype.getAuthors = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.Text.prototype.setAuthors = function(value) {
+  jspb.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional string description = 5;
+ * @return {string}
+ */
+proto.Text.prototype.getDescription = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/** @param {string} value */
+proto.Text.prototype.setDescription = function(value) {
+  jspb.Message.setProto3StringField(this, 5, value);
 };
 
 

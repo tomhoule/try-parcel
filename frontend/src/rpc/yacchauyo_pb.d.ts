@@ -10,6 +10,15 @@ export class Text extends jspb.Message {
   getTitle(): string;
   setTitle(value: string): void;
 
+  getSlug(): string;
+  setSlug(value: string): void;
+
+  getAuthors(): string;
+  setAuthors(value: string): void;
+
+  getDescription(): string;
+  setDescription(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Text.AsObject;
   static toObject(includeInstance: boolean, msg: Text): Text.AsObject;
@@ -24,6 +33,9 @@ export namespace Text {
   export type AsObject = {
     id: string,
     title: string,
+    slug: string,
+    authors: string,
+    description: string,
   }
 }
 

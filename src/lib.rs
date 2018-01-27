@@ -56,6 +56,7 @@ macro_rules! plug {
 
 impl Yacchauyo for Server {
     plug!(texts_index, TextsQuery, Texts);
+    plug!(create_text, Text, Text);
 }
 
 pub fn start() {

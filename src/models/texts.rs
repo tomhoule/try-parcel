@@ -25,14 +25,25 @@ impl Text {
 
 impl From<Text> for proto::Text {
     fn from(txt: Text) -> proto::Text {
+        let Text {
+            id,
+            title,
+            authors,
+            description,
+            slug,
+            ..
+        } = txt;
         let mut p = proto::Text::new();
-        p.set_id(format!("{}", txt.id));
-        p.set_title(txt.title);
+        p.set_id(format!("{}", id));
+        p.set_title(title);
+        p.set_authors(authors);
+        p.set_description(description);
+        p.set_slug(slug);
         p
     }
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, PartialEq, Debug)]
 #[table_name = "texts"]
 pub struct NewText {
     pub title: String,
@@ -50,13 +61,39 @@ impl NewText {
     }
 }
 
+impl From<proto::Text> for NewText {
+    fn from(mut proto: proto::Text) -> NewText {
+        NewText {
+            title: proto.take_title(),
+            slug: proto.take_slug(),
+            authors: proto.take_authors(),
+            description: Some(proto.take_description()),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use uuid::Uuid;
 
     #[test]
-    fn test_to_proto() {
+    pub fn new_text_from_proto() {
+        let mut proto = proto::Text::new();
+        proto.set_title("taïteul".to_string());
+        proto.set_slug("slaggu".to_string());
+        proto.set_authors("me and my pizza".to_string());
+
+        assert_eq!(NewText::from(proto), NewText {
+            title: "taïteul".to_string(),
+            slug: "slaggu".to_string(),
+            authors: "me and my pizza".to_string(),
+            description: Some("".to_string()),
+        })
+    }
+
+    #[test]
+    fn text_to_proto() {
         let id = Uuid::new_v4();
         let title = "meow".to_string();
         let slug = "mw".to_string();

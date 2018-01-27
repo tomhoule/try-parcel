@@ -27,7 +27,6 @@ fn make_conn() -> PgConnection {
 }
 
 fn e2e_test<Inner: UnwindSafe + FnOnce() -> ()>(inner: Inner) {
-    ::std::env::set_var("YACCHAUYO_DATABASE_URL", "postgres://postgres@localhost:5432/yacchauyo_test");
     use_default_config!();
 
     let env = Arc::new(Environment::new(4));
@@ -50,21 +49,22 @@ fn e2e_test<Inner: UnwindSafe + FnOnce() -> ()>(inner: Inner) {
 }
 
 #[test]
-fn texts_index_returns_texts() {
+fn text_creation_and_retrieval() {
     e2e_test(|| {
         let client = make_client();
+
+        let mut req = proto::Text::new();
+        req.set_title("Batman".to_string());
+        req.set_authors("someone no doubt".to_string());
+        req.set_slug("batman".to_string());
+
+        client.create_text(&req).unwrap();
+
         let req = proto::TextsQuery::new();
-        let conn = make_conn();
-        let text = models::texts::NewText {
-            title: "Abc".to_string(),
-            slug: "abc".to_string(),
-            authors: "Calvin & Hobbes".to_string(),
-            description: None,
-        };
-        text.save(&conn).unwrap();
         let res = client.texts_index(&req)
             .unwrap();
-        assert_eq!(res.texts.len(), 1);
-        assert_eq!(res.texts[0].title, "Abc");
+        assert!(res.texts.iter().any(|text| {
+            text.title == "Batman"
+        }))
     })
 }

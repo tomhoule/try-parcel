@@ -1,13 +1,16 @@
 use diesel::prelude::*;
-use dotenv;
+use config::Config;
+use configure::Configure;
 
 pub fn db_setup() -> PgConnection {
     setup();
-    let database_url = ::std::env::var("YACCHAUYO_DATABASE_URL").unwrap();
+    let config = Config::generate()
+        .unwrap();
+    let database_url = config
+        .database_string();
     PgConnection::establish(&database_url).unwrap()
 }
 
 pub fn setup() {
-    dotenv::dotenv().ok();
     use_default_config!();
 }

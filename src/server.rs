@@ -34,12 +34,16 @@ impl Server {
         fill_repeated(&mut response.texts, texts);
         Ok(response)
     }
+
+    pub fn create_text(&self, req: Text) -> Result<Text, Error> {
+        let conn = &*self.pool.get()?;
+        Ok(models::texts::NewText::from(req).save(&conn)?.into())
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use db_schema::texts;
     use test_utils::*;
 
     #[test]
@@ -54,9 +58,26 @@ mod tests {
         let conn = db_setup();
         let req = TextsQuery::new();
         let res = Server::new().texts_index(req).unwrap();
-        assert_eq!(
-            res.texts.len() as i64,
-            texts.count().get_result(&conn).unwrap(),
-        )
+    }
+
+    #[test]
+    fn create_text_works() {
+        use db_schema::texts::dsl::*;
+
+        let conn = db_setup();
+        let mut req = Text::new();
+        req.set_title("Meow".to_string());
+        req.set_authors("Some cats".to_string());
+        req.set_slug("thats_new".to_string());
+
+        let res = Server::new().create_text(req).unwrap();
+
+        assert_eq!(res.get_title(), "Meow");
+        assert_eq!(res.get_authors(), "Some cats");
+        assert_eq!(res.get_slug(), "thats_new");
+
+        let new_uuid: ::uuid::Uuid = res.id.parse().unwrap();
+        let in_db: QueryResult<models::texts::Text> = texts.filter(id.eq(new_uuid)).first(&conn);
+        assert!(in_db.is_ok());
     }
 }
