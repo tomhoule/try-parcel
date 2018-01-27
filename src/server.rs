@@ -3,12 +3,27 @@ use diesel;
 use r2d2;
 use diesel::prelude::*;
 use configure::Configure;
-use rpc::yacchauyo::{Text, Texts, TextsQuery};
+use rpc::yacchauyo::{
+    Text,
+    Texts,
+    TextsQuery
+};
+use models;
 use error::Error;
+use protobuf::RepeatedField;
 
 #[derive(Clone)]
 pub struct Server {
     pool: r2d2::Pool<diesel::r2d2::ConnectionManager<PgConnection>>,
+}
+
+fn fill_repeated<
+    Proto: From<T>,
+    T,
+>(target: &mut RepeatedField<Proto>, existing: Vec<T>) {
+    for element in existing.into_iter() {
+        target.push(element.into())
+    }
 }
 
 impl Server {
@@ -19,11 +34,11 @@ impl Server {
         Server { pool }
     }
 
-    pub fn texts_index(&self, req: TextsQuery) -> Result<Texts, Error> {
+    pub fn texts_index(&self, _req: TextsQuery) -> Result<Texts, Error> {
+        let conn = &*self.pool.get()?;
+        let texts = models::texts::Text::index(conn)?;
         let mut response = ::rpc::yacchauyo::Texts::new();
-        let mut first_text = ::rpc::yacchauyo::Text::new();
-        first_text.set_title("Ethica more geometrico demonstrata".to_string());
-        response.texts.push(first_text);
+        fill_repeated(&mut response.texts, texts);      
         Ok(response)
     }
 }

@@ -1,3 +1,4 @@
+extern crate chrono;
 #[macro_use]
 extern crate configure;
 #[macro_use]
@@ -17,6 +18,7 @@ extern crate uuid;
 mod config;
 mod db_schema;
 mod error;
+mod models;
 mod rpc;
 mod server;
 
@@ -41,7 +43,7 @@ macro_rules! plug {
                             .map_err(|_err| ());
                         ctx.spawn(f)
                     }
-                    Err(err) => {
+                    Err(_err) => {
                         let f = sink.fail(RpcStatus::new(RpcStatusCode::Internal, None))
                             .map_err(|_err| ());
                         ctx.spawn(f)
