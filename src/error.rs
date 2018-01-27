@@ -12,7 +12,7 @@ pub enum Error {
 }
 
 impl From<r2d2::Error> for Error {
-    fn from(err: r2d2::Error) -> Error {
+    fn from(_err: r2d2::Error) -> Error {
         Error::DatabaseUnreachable
     }
 }

@@ -39,12 +39,24 @@ impl Server {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use dotenv;
+    use db_schema::texts;
+    use test_utils::*;
 
     #[test]
     fn server_new_works() {
-        dotenv::dotenv().ok();
-        use_default_config!();
+        setup();
         Server::new();
+    }
+
+    #[test]
+    fn texts_index_works() {
+        use db_schema::texts::dsl::*;
+        let conn = db_setup();
+        let req = TextsQuery::new();
+        let res = Server::new().texts_index(req).unwrap();
+        assert_eq!(
+            res.texts.len() as i64,
+            texts.count().get_result(&conn).unwrap(),
+        )
     }
 }

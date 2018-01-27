@@ -21,9 +21,10 @@ pub mod error;
 pub mod models;
 pub mod rpc;
 pub mod server;
+pub mod test_utils;
 
 use rpc::yacchauyo_grpc::Yacchauyo;
-use grpcio::{Environment, RpcContext, RpcStatus, RpcStatusCode, ServerBuilder, UnarySink};
+use grpcio::{Environment, RpcContext, ServerBuilder, UnarySink};
 use futures::Future;
 use std::sync::Arc;
 use server::Server;
