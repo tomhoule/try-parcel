@@ -5,9 +5,11 @@ authors = ["Tom Houlé <tom@tomhoule.com>"]
 
 [dependencies]
 chrono = "*"
+failure = "*"
 futures = "*"
 grpcio = "=0.2"
 protobuf = "*"
+r2d2 = "*"
 uuid = "*"
 
 [dependencies.diesel]
