@@ -21,4 +21,9 @@ start-proxy:
     --backend_tls=false
 
 diesel-print-schema:
-  diesel print-schema -s yacchauyo > src/db_schema.rs
+  diesel print-schema > src/db_schema.rs
+
+test:
+  DATABASE_URL="postgres://postgres@localhost:5432/yacchauyo_test" \
+    diesel database reset
+  cargo test

@@ -3,6 +3,7 @@ use chrono::{DateTime, Utc};
 use uuid::Uuid;
 use std::convert::From;
 use diesel::prelude::*;
+use db_schema::*;
 
 #[derive(Queryable, Debug)]
 pub struct Text {
@@ -17,7 +18,7 @@ pub struct Text {
 
 impl Text {
     pub fn index(conn: &PgConnection) -> QueryResult<Vec<Text>> {
-        use db_schema::yacchauyo::texts::dsl::*;
+        use db_schema::texts::dsl::*;
         texts.load(conn)
     }
 }
@@ -28,6 +29,24 @@ impl From<Text> for proto::Text {
         p.set_id(format!("{}", txt.id));
         p.set_title(txt.title);
         p
+    }
+}
+
+#[derive(Insertable)]
+#[table_name = "texts"]
+pub struct NewText {
+    pub title: String,
+    pub slug: String,
+    pub authors: String,
+    pub description: Option<String>,
+}
+
+impl NewText {
+    pub fn save(&self, conn: &PgConnection) -> QueryResult<Text> {
+        use db_schema::texts::dsl::*;
+        ::diesel::insert_into(texts)
+            .values(self)
+            .get_result(conn)
     }
 }
 

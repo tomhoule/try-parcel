@@ -15,12 +15,12 @@ extern crate serde;
 extern crate serde_derive;
 extern crate uuid;
 
-mod config;
-mod db_schema;
-mod error;
-mod models;
-mod rpc;
-mod server;
+pub mod config;
+pub mod db_schema;
+pub mod error;
+pub mod models;
+pub mod rpc;
+pub mod server;
 
 use rpc::yacchauyo_grpc::Yacchauyo;
 use grpcio::{Environment, RpcContext, RpcStatus, RpcStatusCode, ServerBuilder, UnarySink};
@@ -58,7 +58,6 @@ impl Yacchauyo for Server {
 }
 
 pub fn start() {
-    dotenv::dotenv().ok();
     use_default_config!();
     let env = Arc::new(Environment::new(4));
     let service = ::rpc::yacchauyo_grpc::create_yacchauyo(Server::new());

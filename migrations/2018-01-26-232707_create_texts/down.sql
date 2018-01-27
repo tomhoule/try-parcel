@@ -1,5 +1,3 @@
-DROP TABLE yacchauyo.fragments;
-DROP TABLE yacchauyo.schemas;
-DROP TABLE yacchauyo.texts;
-
-DROP SCHEMA yacchauyo;
+DROP TABLE fragments;
+DROP TABLE schemas;
+DROP TABLE texts;

@@ -1,4 +1,4 @@
-// package:
+// package: 
 // file: yacchauyo.proto
 
 import * as jspb from "google-protobuf";
