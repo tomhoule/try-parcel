@@ -4,4 +4,6 @@ pub enum Error {
     DatabaseUnreachable,
     #[fail(display="Invalid input")]
     InvalidInput,
+    #[fail(display="Not found")]
+    NotFound,
 }
