@@ -12,18 +12,11 @@ use std::sync::Arc;
 use yacchauyo::rpc::yacchauyo as proto;
 use grpcio::{ServerBuilder, Environment};
 use std::panic::UnwindSafe;
-use diesel::prelude::*;
-use yacchauyo::models;
 
 fn make_client() -> YacchauyoClient {
     let env = Arc::new(grpcio::Environment::new(2));
     let channel = grpcio::ChannelBuilder::new(env).connect("127.0.0.1:5555");
-     YacchauyoClient::new(channel)
-}
-
-fn make_conn() -> PgConnection {
-    let database_url = ::std::env::var("YACCHAUYO_DATABASE_URL").unwrap();
-    PgConnection::establish(&database_url).expect("can connect to pg")
+    YacchauyoClient::new(channel)
 }
 
 fn e2e_test<Inner: UnwindSafe + FnOnce() -> ()>(inner: Inner) {

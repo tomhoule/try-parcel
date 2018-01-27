@@ -54,10 +54,9 @@ mod tests {
 
     #[test]
     fn texts_index_works() {
-        use db_schema::texts::dsl::*;
-        let conn = db_setup();
+        setup();
         let req = TextsQuery::new();
-        let res = Server::new().texts_index(req).unwrap();
+        Server::new().texts_index(req).unwrap();
     }
 
     #[test]

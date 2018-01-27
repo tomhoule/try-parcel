@@ -23,12 +23,15 @@ pub mod rpc;
 pub mod server;
 pub mod test_utils;
 
-use rpc::yacchauyo_grpc::Yacchauyo;
-use grpcio::{Environment, RpcContext, ServerBuilder, UnarySink};
 use futures::Future;
-use std::sync::Arc;
-use server::Server;
+use futures::sync::oneshot;
+use grpcio::{Environment, RpcContext, ServerBuilder, UnarySink};
+use rpc::yacchauyo_grpc::Yacchauyo;
 use rpc::yacchauyo::*;
+use server::Server;
+use std::io::prelude::*;
+use std::sync::Arc;
+use std::thread;
 
 macro_rules! plug {
     ($name:ident, $req:ty, $res:ty) => {
@@ -72,13 +75,12 @@ pub fn start() {
     for &(ref host, port) in server.bind_addrs() {
         println!("listening on {}:{}", host, port);
     }
-    // let (tx, rx) = oneshot::channel();
-    // thread::spawn(move || {
-    //     println!("Press ENTER to exit...");
-    //     let _ = ::std::io::stdin().read(&mut [0]).unwrap();
-    //     tx.send(())
-    // });
-    // let _ = rx.wait();
-    loop {}
+    let (tx, rx) = oneshot::channel();
+    thread::spawn(move || {
+        println!("Press ENTER to exit...");
+        let _ = ::std::io::stdin().read(&mut [0]).unwrap();
+        tx.send(())
+    });
+    let _ = rx.wait();
     let _ = server.shutdown().wait();
 }
