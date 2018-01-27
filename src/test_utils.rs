@@ -4,10 +4,8 @@ use configure::Configure;
 
 pub fn db_setup() -> PgConnection {
     setup();
-    let config = Config::generate()
-        .unwrap();
-    let database_url = config
-        .database_string();
+    let config = Config::generate().unwrap();
+    let database_url = config.database_string();
     PgConnection::establish(&database_url).unwrap()
 }
 

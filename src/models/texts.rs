@@ -55,9 +55,7 @@ pub struct NewText {
 impl NewText {
     pub fn save(&self, conn: &PgConnection) -> QueryResult<Text> {
         use db_schema::texts::dsl::*;
-        ::diesel::insert_into(texts)
-            .values(self)
-            .get_result(conn)
+        ::diesel::insert_into(texts).values(self).get_result(conn)
     }
 }
 
@@ -84,12 +82,15 @@ mod tests {
         proto.set_slug("slaggu".to_string());
         proto.set_authors("me and my pizza".to_string());
 
-        assert_eq!(NewText::from(proto), NewText {
-            title: "taïteul".to_string(),
-            slug: "slaggu".to_string(),
-            authors: "me and my pizza".to_string(),
-            description: Some("".to_string()),
-        })
+        assert_eq!(
+            NewText::from(proto),
+            NewText {
+                title: "taïteul".to_string(),
+                slug: "slaggu".to_string(),
+                authors: "me and my pizza".to_string(),
+                description: Some("".to_string()),
+            }
+        )
     }
 
     #[test]

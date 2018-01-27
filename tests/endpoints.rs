@@ -1,16 +1,16 @@
 #[macro_use]
 extern crate configure;
-extern crate grpcio;
-extern crate yacchauyo;
 extern crate diesel;
 extern crate futures;
+extern crate grpcio;
+extern crate yacchauyo;
 
 use futures::Future;
 use yacchauyo::rpc::yacchauyo_grpc::YacchauyoClient;
 use yacchauyo::server::Server;
 use std::sync::Arc;
 use yacchauyo::rpc::yacchauyo as proto;
-use grpcio::{ServerBuilder, Environment};
+use grpcio::{Environment, ServerBuilder};
 use std::panic::UnwindSafe;
 
 fn make_client() -> YacchauyoClient {
@@ -31,10 +31,7 @@ fn e2e_test<Inner: UnwindSafe + FnOnce() -> ()>(inner: Inner) {
         .unwrap();
     server.start();
 
-
-    let result = ::std::panic::catch_unwind(move || {
-        inner()
-    });
+    let result = ::std::panic::catch_unwind(move || inner());
 
     server.shutdown().wait().unwrap();
 
@@ -54,10 +51,7 @@ fn text_creation_and_retrieval() {
         client.create_text(&req).unwrap();
 
         let req = proto::TextsQuery::new();
-        let res = client.texts_index(&req)
-            .unwrap();
-        assert!(res.texts.iter().any(|text| {
-            text.title == "Batman"
-        }))
+        let res = client.texts_index(&req).unwrap();
+        assert!(res.texts.iter().any(|text| text.title == "Batman"))
     })
 }
