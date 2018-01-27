@@ -5,10 +5,14 @@ authors = ["Tom Houlé <tom@tomhoule.com>"]
 
 [dependencies]
 chrono = "*"
-failure = "*"
+configure = "*"
+dotenv = "*"
+failure = "0.1"
 futures = "*"
 grpcio = "=0.2"
 protobuf = "*"
+serde = "1.0"
+serde_derive = "1.0"
 r2d2 = "*"
 uuid = "*"
 

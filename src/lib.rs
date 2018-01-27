@@ -1,33 +1,31 @@
 #[macro_use]
+extern crate configure;
+#[macro_use]
 extern crate diesel;
+extern crate dotenv;
 #[macro_use]
 extern crate failure;
 extern crate futures;
 extern crate grpcio;
 extern crate protobuf;
 extern crate r2d2;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
 extern crate uuid;
 
+mod config;
 mod db_schema;
 mod error;
 mod rpc;
+mod server;
 
 use rpc::yacchauyo_grpc::Yacchauyo;
 use grpcio::{Environment, RpcContext, ServerBuilder, UnarySink};
 use futures::Future;
 use std::sync::Arc;
-use diesel::prelude::*;
+use server::Server;
 
-#[derive(Clone)]
-struct Server {
-    pool: r2d2::Pool<diesel::r2d2::ConnectionManager<PgConnection>>,
-}
-
-impl Server {
-    fn new() -> Self {
-        unimplemented!()
-    }
-}
 
 impl Yacchauyo for Server {
     fn texts_index(
@@ -47,6 +45,8 @@ impl Yacchauyo for Server {
 }
 
 pub fn start() {
+    dotenv::dotenv().ok();
+    use_default_config!();
     let env = Arc::new(Environment::new(4));
     let service = ::rpc::yacchauyo_grpc::create_yacchauyo(Server::new());
     let mut server = ServerBuilder::new(env)
