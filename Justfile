@@ -19,3 +19,6 @@ start-proxy:
     --server_tls_cert_file=etc/localhost.crt \
     --server_tls_key_file=etc/localhost.key \
     --backend_tls=false
+
+diesel-print-schema:
+  diesel print-schema -s yacchauyo > src/db_schema.rs

@@ -1,8 +1,11 @@
+#[macro_use]
+extern crate diesel;
 extern crate futures;
 extern crate grpcio;
-// extern crate grpcio_proto;
 extern crate protobuf;
+extern crate uuid;
 
+mod db_schema;
 mod rpc;
 
 use rpc::yacchauyo_grpc::Yacchauyo;
