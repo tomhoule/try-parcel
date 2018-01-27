@@ -8,29 +8,23 @@ import { grpc, Code } from 'grpc-web-client'
 import { API_URL } from '../config'
 import { Message } from 'google-protobuf';
 
-export function callBackend<
-  Response extends Method['responseType'],
+export function rpcCall<
   Request extends Message,
-  Method extends grpc.UnaryMethodDefinition<Request, Message & Response>
+  Response,
+  Method extends grpc.UnaryMethodDefinition<Request, Message>
 >(
   method: Method,
-  request: Request
-): Promise<Response> {
+   request: Request
+): Promise<grpc.UnaryOutput<Message>> {
   return new Promise((resolve, reject) => grpc.unary(method, {
     request,
     host: API_URL,
-    metadata: {
-    },
-    onEnd: (message: grpc.UnaryOutput<any>) => {
+    onEnd: (message) => {
       if (message.status !== Code.OK) {
         console.log('Error response: ', message)
         reject(message)
       } else {
-        if (message.message) {
-          resolve(message.message as Response)
-        } else {
-          reject(message)
-        }
+        resolve(message)
       }
     }
   }))
@@ -39,14 +33,11 @@ export function callBackend<
 export function* textsIndex(action: Action<{}>): SagaIterator {
   const payload = new proto.TextsQuery()
   const wrongPaylaoad = new proto.Text()
-  const texts = callBackend(
+  const texts = rpcCall(
     backend.Yacchauyo.TextsIndex,
     payload
   ).then(
-    (texts: typeof proto.Texts) => {
-      const obj = texts.toObject(true, undefined as any)
-      console.log(obj)
-    }
+    texts => console.log(texts) 
   )
 }
 
