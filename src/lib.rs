@@ -21,27 +21,38 @@ mod rpc;
 mod server;
 
 use rpc::yacchauyo_grpc::Yacchauyo;
-use grpcio::{Environment, RpcContext, ServerBuilder, UnarySink};
+use grpcio::{Environment, RpcContext, RpcStatus, RpcStatusCode, ServerBuilder, UnarySink};
 use futures::Future;
 use std::sync::Arc;
 use server::Server;
+use rpc::yacchauyo::*;
 
+macro_rules! plug {
+    ($name:ident, $req:ty, $res:ty) => {
+        fn $name(
+                &self,
+                ctx: RpcContext,
+                req: $req,
+                sink: UnarySink<$res>
+            ) {
+                match self.$name(req) {
+                    Ok(response) => {
+                        let f = sink.success(response)
+                            .map_err(|_err| ());
+                        ctx.spawn(f)
+                    }
+                    Err(err) => {
+                        let f = sink.fail(RpcStatus::new(RpcStatusCode::Internal, None))
+                            .map_err(|_err| ());
+                        ctx.spawn(f)
+                    }
+                };
+            }
+    }
+}
 
 impl Yacchauyo for Server {
-    fn texts_index(
-        &self,
-        ctx: RpcContext,
-        _req: ::rpc::yacchauyo::TextsQuery,
-        sink: UnarySink<rpc::yacchauyo::Texts>
-    ) {
-        let mut response = ::rpc::yacchauyo::Texts::new();
-        let mut first_text = ::rpc::yacchauyo::Text::new();
-        first_text.set_title("Ethica more geometrico demonstrata".to_string());
-        response.texts.push(first_text);
-        let f = sink.success(response)
-            .map_err(|_err| ());
-        ctx.spawn(f);
-    }
+    plug!(texts_index, TextsQuery, Texts);
 }
 
 pub fn start() {
