@@ -1,8 +1,8 @@
-
 #[derive(Deserialize, Configure)]
 #[serde(default)]
+
 pub struct Config {
-    database_url: String
+    database_url: String,
 }
 
 impl Config {

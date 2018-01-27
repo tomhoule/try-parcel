@@ -43,8 +43,8 @@ macro_rules! plug {
                             .map_err(|_err| ());
                         ctx.spawn(f)
                     }
-                    Err(_err) => {
-                        let f = sink.fail(RpcStatus::new(RpcStatusCode::Internal, None))
+                    Err(err) => {
+                        let f = sink.fail(err.as_grpc())
                             .map_err(|_err| ());
                         ctx.spawn(f)
                     }
