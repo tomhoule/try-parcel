@@ -479,7 +479,8 @@ proto.TextsQuery.prototype.toObject = function(opt_includeInstance) {
  */
 proto.TextsQuery.toObject = function(includeInstance, msg) {
   var f, obj = {
-    title: jspb.Message.getFieldWithDefault(msg, 1, "")
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    title: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -518,6 +519,10 @@ proto.TextsQuery.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
+      msg.setId(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
       msg.setTitle(value);
       break;
     default:
@@ -549,10 +554,17 @@ proto.TextsQuery.prototype.serializeBinary = function() {
  */
 proto.TextsQuery.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getTitle();
+  f = message.getId();
   if (f.length > 0) {
     writer.writeString(
       1,
+      f
+    );
+  }
+  f = message.getTitle();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
       f
     );
   }
@@ -560,17 +572,32 @@ proto.TextsQuery.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional string title = 1;
+ * optional string id = 1;
  * @return {string}
  */
-proto.TextsQuery.prototype.getTitle = function() {
+proto.TextsQuery.prototype.getId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /** @param {string} value */
-proto.TextsQuery.prototype.setTitle = function(value) {
+proto.TextsQuery.prototype.setId = function(value) {
   jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string title = 2;
+ * @return {string}
+ */
+proto.TextsQuery.prototype.getTitle = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.TextsQuery.prototype.setTitle = function(value) {
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

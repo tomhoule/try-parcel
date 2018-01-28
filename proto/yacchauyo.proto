@@ -3,6 +3,7 @@ syntax = "proto3";
 service Yacchauyo {
   rpc TextsIndex (TextsQuery) returns (Texts);
   rpc CreateText (Text) returns (Text);
+  rpc PatchText (Text) returns (Text);
 }
 
 message Text {
@@ -18,5 +19,6 @@ message Texts {
 }
 
 message TextsQuery {
-  string title = 1;
+  string id = 1;
+  string title = 2;
 }

@@ -22,4 +22,12 @@ export namespace Yacchauyo {
     static readonly requestType = yacchauyo_pb.Text;
     static readonly responseType = yacchauyo_pb.Text;
   }
+  export class PatchText {
+    static readonly methodName = "PatchText";
+    static readonly service = Yacchauyo;
+    static readonly requestStream = false;
+    static readonly responseStream = false;
+    static readonly requestType = yacchauyo_pb.Text;
+    static readonly responseType = yacchauyo_pb.Text;
+  }
 }

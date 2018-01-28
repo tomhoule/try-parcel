@@ -21,7 +21,9 @@ pub mod error;
 pub mod models;
 pub mod rpc;
 pub mod server;
+#[cfg(test)]
 pub mod test_utils;
+pub mod utils;
 
 use futures::Future;
 use futures::sync::oneshot;
@@ -60,6 +62,7 @@ macro_rules! plug {
 impl Yacchauyo for Server {
     plug!(texts_index, TextsQuery, Texts);
     plug!(create_text, Text, Text);
+    plug!(patch_text, Text, Text);
 }
 
 pub fn start() {

@@ -62,6 +62,9 @@ export namespace Texts {
 }
 
 export class TextsQuery extends jspb.Message {
+  getId(): string;
+  setId(value: string): void;
+
   getTitle(): string;
   setTitle(value: string): void;
 
@@ -77,6 +80,7 @@ export class TextsQuery extends jspb.Message {
 
 export namespace TextsQuery {
   export type AsObject = {
+    id: string,
     title: string,
   }
 }

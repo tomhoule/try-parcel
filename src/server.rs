@@ -39,12 +39,18 @@ impl Server {
         let conn = &*self.pool.get()?;
         Ok(models::texts::NewText::from(req).save(&conn)?.into())
     }
+
+    pub fn patch_text(&self, req: Text) -> Result<Text, Error> {
+        let conn = self.pool.get()?;
+        Ok(models::texts::TextPatch::from(req).save(&conn)?.into())
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use test_utils::*;
+    use diesel::dsl::*;
 
     #[test]
     fn server_new_works() {
@@ -78,5 +84,52 @@ mod tests {
         let new_uuid: ::uuid::Uuid = res.id.parse().unwrap();
         let in_db: QueryResult<models::texts::Text> = texts.filter(id.eq(new_uuid)).first(&conn);
         assert!(in_db.is_ok());
+    }
+
+    #[test]
+    fn create_text_is_idempotent() {
+        let server = Server::new();
+        let mut proto = Text::new();
+        proto.slug = "my slug".to_string();
+        proto.title = "my title".to_string();
+
+        server.create_text(proto.clone()).unwrap();
+        match server.create_text(proto) {
+            Err(Error::Db {
+                inner:
+                    ::diesel::result::Error::DatabaseError(
+                        ::diesel::result::DatabaseErrorKind::UniqueViolation,
+                        _,
+                    ),
+            }) => (),
+            Ok(_) => panic!("created a text twice"),
+            Err(err) => panic!("Unexpected error: {:?}", err),
+        }
+    }
+
+    #[test]
+    fn patch_text_works() {
+        use db_schema::texts::dsl::*;
+
+        let conn = db_setup();
+        let server = Server::new();
+        let mut req = Text::new();
+        req.set_title("Meow".to_string());
+        let res = server.create_text(req).unwrap();
+        let new_uuid: ::uuid::Uuid = res.id.parse().unwrap();
+
+        let mut patch = Text::new();
+        patch.set_id(format!("{}", new_uuid));
+        patch.set_title("Woof".to_string());
+
+        let res = server.patch_text(patch).unwrap();
+        assert_eq!(res.title, "Woof");
+
+        let count: i64 = texts
+            .filter(title.eq("Woof"))
+            .select(count(id))
+            .get_result(&conn)
+            .unwrap();
+        assert_eq!(count, 1);
     }
 }

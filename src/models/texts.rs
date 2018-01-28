@@ -5,7 +5,7 @@ use std::convert::From;
 use diesel::prelude::*;
 use db_schema::*;
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable, Debug, PartialEq)]
 pub struct Text {
     id: Uuid,
     title: String,
@@ -49,6 +49,15 @@ pub struct NewText {
     pub title: String,
     pub slug: String,
     pub authors: String,
+    pub description: String,
+}
+
+#[derive(Identifiable, AsChangeset, PartialEq, Debug)]
+#[table_name = "texts"]
+pub struct TextPatch {
+    pub id: Uuid,
+    pub title: Option<String>,
+    pub authors: Option<String>,
     pub description: Option<String>,
 }
 
@@ -59,13 +68,58 @@ impl NewText {
     }
 }
 
+impl TextPatch {
+    fn is_empty(&self) -> bool {
+        if let &TextPatch {
+            id: _,
+            title: None,
+            authors: None,
+            description: None,
+        } = self
+        {
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn save(&self, conn: &PgConnection) -> QueryResult<Text> {
+        use db_schema::texts::dsl::*;
+        // Empty changesets cause query builder errors
+        if self.is_empty() {
+            texts.find(self.id).get_result(conn)
+        } else {
+            ::diesel::update(self).set(self).get_result(conn)
+        }
+    }
+}
+
+fn undefault(s: String) -> Option<String> {
+    if s.is_empty() {
+        None
+    } else {
+        Some(s)
+    }
+}
+
 impl From<proto::Text> for NewText {
     fn from(mut proto: proto::Text) -> NewText {
         NewText {
             title: proto.take_title(),
             slug: proto.take_slug(),
             authors: proto.take_authors(),
-            description: Some(proto.take_description()),
+            description: proto.take_description(),
+        }
+    }
+}
+
+impl From<proto::Text> for TextPatch {
+    fn from(mut proto: proto::Text) -> TextPatch {
+        TextPatch {
+            id: proto.take_id().parse().expect("id for update"),
+            title: undefault(proto.take_title()),
+            authors: undefault(proto.take_authors()),
+            description: undefault(proto.take_description()),
         }
     }
 }
@@ -74,23 +128,107 @@ impl From<proto::Text> for NewText {
 mod tests {
     use super::*;
     use uuid::Uuid;
+    use test_utils::*;
+    use diesel::dsl::count;
 
     #[test]
     pub fn new_text_from_proto() {
         let mut proto = proto::Text::new();
-        proto.set_title("taïteul".to_string());
+        proto.set_title("the_title".to_string());
         proto.set_slug("slaggu".to_string());
         proto.set_authors("me and my pizza".to_string());
 
         assert_eq!(
             NewText::from(proto),
             NewText {
-                title: "taïteul".to_string(),
+                title: "the_title".to_string(),
                 slug: "slaggu".to_string(),
                 authors: "me and my pizza".to_string(),
-                description: Some("".to_string()),
+                description: "".to_string(),
             }
         )
+    }
+
+    #[test]
+    fn update_with_empty_proto_is_noop() {
+        let conn = db_setup();
+        conn.begin_test_transaction().ok();
+        let mut proto = proto::Text::new();
+        proto.set_title("something1".to_string());
+        proto.set_slug("something2".to_string());
+        proto.set_authors("something3".to_string());
+
+        let new = NewText::from(proto).save(&conn).unwrap();
+        let mut patch = proto::Text::new();
+        patch.id = format!("{}", new.id);
+        let updated = TextPatch::from(patch).save(&conn).unwrap();
+        assert_eq!(new, updated);
+    }
+
+    #[test]
+    fn update_does_not_create() {
+        use db_schema::texts::dsl::*;
+
+        let conn = db_setup();
+        conn.begin_test_transaction().ok();
+        let mut proto = proto::Text::new();
+        proto.set_title("something1".to_string());
+        proto.set_slug("something2".to_string());
+        proto.set_authors("something3".to_string());
+        let new = NewText::from(proto).save(&conn).unwrap();
+        let mut patch = proto::Text::new();
+        patch.id = format!("{}", new.id);
+        patch.title = "something4".to_string();
+        let updated = TextPatch::from(patch).save(&conn).unwrap();
+        let old_count: i64 = texts
+            .filter(title.eq("something1"))
+            .select(count(id))
+            .get_result(&conn)
+            .unwrap();
+        let new_count: i64 = texts
+            .filter(title.eq("something4"))
+            .select(count(id))
+            .get_result(&conn)
+            .unwrap();
+        assert_eq!(old_count, 0);
+        assert_eq!(new_count, 1);
+        assert_eq!(updated.id, new.id);
+        assert_eq!(updated.authors, new.authors);
+    }
+
+    #[test]
+    pub fn new_text_save_and_update() {
+        use db_schema::texts::dsl::*;
+        use diesel::dsl::*;
+
+        let conn = db_setup();
+        let mut proto = proto::Text::new();
+        proto.set_title("batmann1".to_string());
+        proto.set_slug("batmann2".to_string());
+        proto.set_authors("batmann3".to_string());
+
+        let mut updated = proto.clone();
+        let new = NewText::from(proto).save(&conn).unwrap();
+
+        updated.set_id(format!("{}", new.id));
+        updated.set_title("batmann4".to_string());
+
+        TextPatch::from(updated).save(&conn).unwrap();
+
+        let original_title_count: i64 = texts
+            .filter(title.eq("batmann1"))
+            .select(count(title))
+            .first(&conn)
+            .unwrap();
+
+        let new_title_count: i64 = texts
+            .filter(title.eq("batmann4"))
+            .select(count(title))
+            .first(&conn)
+            .unwrap();
+
+        assert_eq!(original_title_count, 0);
+        assert_eq!(new_title_count, 1);
     }
 
     #[test]
