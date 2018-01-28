@@ -76,9 +76,15 @@ export function* textSchema(action: Action<proto.TextsQuery>): SagaIterator {
   return response.message.toObject()
 }
 
+export function* patchSchema(action: Action<proto.Schema>): SagaIterator {
+  const response = yield call(rpcCall, backend.Yacchauyo.PatchSchema, action.payload)
+  return response.message.toObject()
+}
+
 export function* rootSaga() {
   yield takeLatest(texts.fetchIndex.started.type, buckle(texts.fetchIndex, textsIndex))
   yield takeLatest(texts.create.started.type, buckle(texts.create, createText))
   yield takeLatest(texts.patch.started.type, buckle(texts.patch, patchText))
   yield takeLatest(schemas.textSchema.type, buckle(schemas.textSchema, textSchema))
+  yield takeLatest(schemas.patchSchema.type, buckle(schemas.patchSchema, patchSchema))
 }

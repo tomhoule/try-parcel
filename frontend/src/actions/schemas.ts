@@ -4,5 +4,6 @@ import * as proto from '../rpc/yacchauyo_pb'
 const factory = actionCreatorFactory('schemas')
 
 export const schemas = {
-  textSchema: factory.async<proto.TextsQuery, proto.Schema, {}>('CREATE'),
+  patchSchema: factory.async<proto.Schema, proto.Schema, {}>('PATCH'),
+  textSchema: factory.async<proto.TextsQuery, proto.Schema, {}>('FETCH'),
 }

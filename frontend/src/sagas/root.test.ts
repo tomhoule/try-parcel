@@ -28,6 +28,11 @@ describe('rootSaga', () => {
     expect(next.value.FORK).toBeDefined()
   })
 
+  it('forks patchSchema', () => {
+    const next = saga.next()
+    expect(next.value.FORK).toBeDefined()
+  })
+
   it('is then done', () => {
     const next = saga.next()
     expect(next.value).not.toBeDefined()
@@ -101,6 +106,25 @@ describe('textSchema', () => {
     const next = saga.next()
     expect(next.value)
       .toEqual(call(sagas.rpcCall, backend.Yacchauyo.TextSchema, action.payload))
+  })
+
+  it('then returns the result of the call', () => {
+    const result = new proto.Schema()
+    result.setId('3333')
+    const next = saga.next({ message: result })
+    expect(next.value).toEqual(result.toObject())
+    expect(next.done).toBe(true)
+  })
+})
+
+describe('patchSchema', () => {
+  const action = schemas.patchSchema.started(new proto.Schema())
+  const saga = sagas.patchSchema(action)
+
+  it('calls the api', () => {
+    const next = saga.next()
+    expect(next.value)
+      .toEqual(call(sagas.rpcCall, backend.Yacchauyo.PatchSchema, action.payload))
   })
 
   it('then returns the result of the call', () => {
