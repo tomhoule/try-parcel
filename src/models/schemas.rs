@@ -9,7 +9,7 @@ use db_schema::*;
 use models::texts::Text;
 
 #[derive(Identifiable, Associations, Queryable, Debug, PartialEq)]
-#[belongs_to(Text, foreign_key="text_id")]
+#[belongs_to(Text, foreign_key = "text_id")]
 pub struct Schema {
     pub id: Uuid,
     pub text_id: Uuid,
@@ -26,10 +26,10 @@ impl Schema {
             .first(conn)
             .optional()?;
         match existing {
-            None => ::diesel::insert_into(schemas).values(
-                text_id.eq(req_text_id)
-                ).get_result(conn),
-            Some(schema) => Ok(schema)
+            None => ::diesel::insert_into(schemas)
+                .values(text_id.eq(req_text_id))
+                .get_result(conn),
+            Some(schema) => Ok(schema),
         }
     }
 }
@@ -52,12 +52,11 @@ impl From<Schema> for proto::Schema {
 }
 
 #[derive(Debug, PartialEq, AsChangeset)]
-#[table_name="schemas"]
+#[table_name = "schemas"]
 pub struct SchemaPatch {
     id: Uuid,
     paths: Vec<String>,
 }
-
 
 // TODO: convert to TryFrom when available
 impl From<proto::Schema> for SchemaPatch {
@@ -92,7 +91,7 @@ mod tests {
         let converted: proto::Schema = Schema {
             id: Uuid::new_v4(),
             text_id: Uuid::new_v4(),
-            paths: vec!(),
+            paths: vec![],
             created_at: Utc::now(),
         }.into();
 
@@ -108,7 +107,8 @@ mod tests {
             authors: "cd".to_string(),
             slug: "ef".to_string(),
             description: "gh".to_string(),
-        }.save(&conn).unwrap();
+        }.save(&conn)
+            .unwrap();
 
         let first = Schema::for_text(&conn, text.id).unwrap();
         let second = Schema::for_text(&conn, text.id).unwrap();
@@ -127,7 +127,7 @@ mod tests {
         proto.paths.push("potato".to_string());
         let expected = SchemaPatch {
             id: uuid,
-            paths: vec!("banana".to_string(), "potato".to_string()),
+            paths: vec!["banana".to_string(), "potato".to_string()],
         };
         assert_eq!(SchemaPatch::from(proto), expected);
     }
@@ -141,9 +141,14 @@ mod tests {
             slug: "muh".to_string(),
             authors: "".to_string(),
             description: "".to_string(),
-        }.save(&conn).unwrap();
+        }.save(&conn)
+            .unwrap();
         let before = Schema::for_text(&conn, text.id).unwrap();
-        let after = SchemaPatch { id: before.id, paths: vec!("banana".to_string(), "rucola".to_string()) }.save(&conn).unwrap();
+        let after = SchemaPatch {
+            id: before.id,
+            paths: vec!["banana".to_string(), "rucola".to_string()],
+        }.save(&conn)
+            .unwrap();
 
         assert_eq!(before.paths, &["index"]);
         assert_eq!(after.paths, &["banana", "rucola"]);

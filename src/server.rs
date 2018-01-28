@@ -3,7 +3,7 @@ use diesel;
 use r2d2;
 use diesel::prelude::*;
 use configure::Configure;
-use rpc::yacchauyo::{Text, Texts, TextsQuery, Schema};
+use rpc::yacchauyo::{Schema, Text, Texts, TextsQuery};
 use models;
 use error::Error;
 use utils::*;
@@ -168,7 +168,7 @@ mod tests {
         let schema = create_schema(&conn, "lettuce");
         let mut req = Schema::new();
         req.set_id(schema.id.to_string());
-        req.set_paths(RepeatedField::from_vec(vec!("tomato".to_string())));
+        req.set_paths(RepeatedField::from_vec(vec!["tomato".to_string()]));
 
         let res = Server::new().patch_schema(req).unwrap();
 
@@ -181,7 +181,8 @@ mod tests {
             slug: slug.to_string(),
             authors: "falafel_authors".to_string(),
             description: "".to_string(),
-        }.save(&conn).unwrap()
+        }.save(&conn)
+            .unwrap()
     }
 
     fn create_schema(conn: &PgConnection, slug: &str) -> models::schemas::Schema {
