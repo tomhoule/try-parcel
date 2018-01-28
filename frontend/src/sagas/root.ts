@@ -1,6 +1,7 @@
 import { SagaIterator } from 'redux-saga'
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { texts } from '../actions/texts'
+import { schemas } from '../actions/schemas'
 import { Action, AsyncActionCreators } from 'typescript-fsa'
 import * as proto from '../rpc/yacchauyo_pb'
 import * as backend from '../rpc/yacchauyo_pb_service'
@@ -70,8 +71,14 @@ export function* patchText(action: Action<proto.Text>): SagaIterator {
   return response.message.toObject()
 }
 
+export function* textSchema(action: Action<proto.TextsQuery>): SagaIterator {
+  const response = yield call(rpcCall, backend.Yacchauyo.TextSchema, action.payload)
+  return response.message.toObject()
+}
+
 export function* rootSaga() {
   yield takeLatest(texts.fetchIndex.started.type, buckle(texts.fetchIndex, textsIndex))
   yield takeLatest(texts.create.started.type, buckle(texts.create, createText))
   yield takeLatest(texts.patch.started.type, buckle(texts.patch, patchText))
+  yield takeLatest(schemas.textSchema.type, buckle(schemas.textSchema, textSchema))
 }

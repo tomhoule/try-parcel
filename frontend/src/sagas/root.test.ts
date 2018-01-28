@@ -1,6 +1,7 @@
 import { call } from 'redux-saga/effects'
 import * as sagas from './root'
 import { texts } from '../actions/texts'
+import { schemas } from '../actions/schemas'
 import * as backend from '../rpc/yacchauyo_pb_service'
 import * as proto from '../rpc/yacchauyo_pb'
 
@@ -18,6 +19,11 @@ describe('rootSaga', () => {
   })
 
   it('forks patchText', () => {
+    const next = saga.next()
+    expect(next.value.FORK).toBeDefined()
+  })
+
+  it('forks textSchema', () => {
     const next = saga.next()
     expect(next.value.FORK).toBeDefined()
   })
@@ -80,6 +86,25 @@ describe('patchText', () => {
 
   it('then returns the result of the call', () => {
     const result = new proto.Text()
+    result.setId('3333')
+    const next = saga.next({ message: result })
+    expect(next.value).toEqual(result.toObject())
+    expect(next.done).toBe(true)
+  })
+})
+
+describe('textSchema', () => {
+  const action = schemas.textSchema.started(new proto.TextsQuery())
+  const saga = sagas.textSchema(action)
+
+  it('calls the api', () => {
+    const next = saga.next()
+    expect(next.value)
+      .toEqual(call(sagas.rpcCall, backend.Yacchauyo.TextSchema, action.payload))
+  })
+
+  it('then returns the result of the call', () => {
+    const result = new proto.Schema()
     result.setId('3333')
     const next = saga.next({ message: result })
     expect(next.value).toEqual(result.toObject())
