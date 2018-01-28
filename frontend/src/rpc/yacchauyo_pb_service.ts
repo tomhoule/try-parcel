@@ -39,4 +39,12 @@ export namespace Yacchauyo {
     static readonly requestType = yacchauyo_pb.TextsQuery;
     static readonly responseType = yacchauyo_pb.Schema;
   }
+  export class PatchSchema {
+    static readonly methodName = "PatchSchema";
+    static readonly service = Yacchauyo;
+    static readonly requestStream = false;
+    static readonly responseStream = false;
+    static readonly requestType = yacchauyo_pb.Schema;
+    static readonly responseType = yacchauyo_pb.Schema;
+  }
 }

@@ -51,6 +51,34 @@ impl From<Schema> for proto::Schema {
     }
 }
 
+#[derive(Debug, PartialEq, AsChangeset)]
+#[table_name="schemas"]
+pub struct SchemaPatch {
+    id: Uuid,
+    paths: Vec<String>,
+}
+
+
+// TODO: convert to TryFrom when available
+impl From<proto::Schema> for SchemaPatch {
+    fn from(mut proto: proto::Schema) -> SchemaPatch {
+        SchemaPatch {
+            id: proto.id.parse().unwrap(),
+            paths: proto.take_paths().to_vec(),
+        }
+    }
+}
+
+impl SchemaPatch {
+    pub fn save(&self, conn: &PgConnection) -> QueryResult<Schema> {
+        use db_schema::schemas::dsl::*;
+        ::diesel::update(schemas)
+            .filter(id.eq(self.id))
+            .set(self)
+            .get_result(conn)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -88,5 +116,37 @@ mod tests {
 
         assert_eq!(first, second);
         assert_eq!(second, third);
+    }
+
+    #[test]
+    fn schema_patch_from_proto_works() {
+        let mut proto = proto::Schema::new();
+        let uuid = ::uuid::Uuid::new_v4();
+        proto.set_id(uuid.to_string());
+        proto.paths.push("banana".to_string());
+        proto.paths.push("potato".to_string());
+        let expected = SchemaPatch {
+            id: uuid,
+            paths: vec!("banana".to_string(), "potato".to_string()),
+        };
+        assert_eq!(SchemaPatch::from(proto), expected);
+    }
+
+    #[test]
+    fn schema_patch_save_works() {
+        let conn = db_setup();
+        conn.begin_test_transaction().unwrap();
+        let text = NewText {
+            title: "mah".to_string(),
+            slug: "muh".to_string(),
+            authors: "".to_string(),
+            description: "".to_string(),
+        }.save(&conn).unwrap();
+        let before = Schema::for_text(&conn, text.id).unwrap();
+        let after = SchemaPatch { id: before.id, paths: vec!("banana".to_string(), "rucola".to_string()) }.save(&conn).unwrap();
+
+        assert_eq!(before.paths, &["index"]);
+        assert_eq!(after.paths, &["banana", "rucola"]);
+        assert_eq!(before.id, after.id);
     }
 }

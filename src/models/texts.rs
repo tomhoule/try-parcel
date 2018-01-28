@@ -102,6 +102,7 @@ fn undefault(s: String) -> Option<String> {
     }
 }
 
+// TODO: convert to TryFrom when available
 impl From<proto::Text> for NewText {
     fn from(mut proto: proto::Text) -> NewText {
         NewText {

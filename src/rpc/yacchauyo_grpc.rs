@@ -46,6 +46,13 @@ const METHOD_YACCHAUYO_TEXT_SCHEMA: ::grpcio::Method<super::yacchauyo::TextsQuer
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
+const METHOD_YACCHAUYO_PATCH_SCHEMA: ::grpcio::Method<super::yacchauyo::Schema, super::yacchauyo::Schema> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/Yacchauyo/PatchSchema",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
 pub struct YacchauyoClient {
     client: ::grpcio::Client,
 }
@@ -120,6 +127,22 @@ impl YacchauyoClient {
     pub fn text_schema_async(&self, req: &super::yacchauyo::TextsQuery) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::yacchauyo::Schema>> {
         self.text_schema_async_opt(req, ::grpcio::CallOption::default())
     }
+
+    pub fn patch_schema_opt(&self, req: &super::yacchauyo::Schema, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::yacchauyo::Schema> {
+        self.client.unary_call(&METHOD_YACCHAUYO_PATCH_SCHEMA, req, opt)
+    }
+
+    pub fn patch_schema(&self, req: &super::yacchauyo::Schema) -> ::grpcio::Result<super::yacchauyo::Schema> {
+        self.patch_schema_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn patch_schema_async_opt(&self, req: &super::yacchauyo::Schema, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::yacchauyo::Schema>> {
+        self.client.unary_call_async(&METHOD_YACCHAUYO_PATCH_SCHEMA, req, opt)
+    }
+
+    pub fn patch_schema_async(&self, req: &super::yacchauyo::Schema) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::yacchauyo::Schema>> {
+        self.patch_schema_async_opt(req, ::grpcio::CallOption::default())
+    }
     pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Item = (), Error = ()> + Send + 'static {
         self.client.spawn(f)
     }
@@ -130,6 +153,7 @@ pub trait Yacchauyo {
     fn create_text(&self, ctx: ::grpcio::RpcContext, req: super::yacchauyo::Text, sink: ::grpcio::UnarySink<super::yacchauyo::Text>);
     fn patch_text(&self, ctx: ::grpcio::RpcContext, req: super::yacchauyo::Text, sink: ::grpcio::UnarySink<super::yacchauyo::Text>);
     fn text_schema(&self, ctx: ::grpcio::RpcContext, req: super::yacchauyo::TextsQuery, sink: ::grpcio::UnarySink<super::yacchauyo::Schema>);
+    fn patch_schema(&self, ctx: ::grpcio::RpcContext, req: super::yacchauyo::Schema, sink: ::grpcio::UnarySink<super::yacchauyo::Schema>);
 }
 
 pub fn create_yacchauyo<S: Yacchauyo + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
@@ -149,6 +173,10 @@ pub fn create_yacchauyo<S: Yacchauyo + Send + Clone + 'static>(s: S) -> ::grpcio
     let instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_YACCHAUYO_TEXT_SCHEMA, move |ctx, req, resp| {
         instance.text_schema(ctx, req, resp)
+    });
+    let instance = s.clone();
+    builder = builder.add_unary_handler(&METHOD_YACCHAUYO_PATCH_SCHEMA, move |ctx, req, resp| {
+        instance.patch_schema(ctx, req, resp)
     });
     builder.build()
 }

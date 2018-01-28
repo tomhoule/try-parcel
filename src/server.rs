@@ -44,6 +44,11 @@ impl Server {
         let conn = self.pool.get()?;
         Ok(models::schemas::Schema::for_text(&conn, id)?.into())
     }
+
+    pub fn patch_schema(&self, req: Schema) -> Result<Schema, Error> {
+        let conn = self.pool.get()?;
+        Ok(models::schemas::SchemaPatch::from(req).save(&conn)?.into())
+    }
 }
 
 #[cfg(test)]
@@ -51,6 +56,7 @@ mod tests {
     use super::*;
     use test_utils::*;
     use diesel::dsl::*;
+    use protobuf::RepeatedField;
 
     #[test]
     fn server_new_works() {
@@ -137,12 +143,7 @@ mod tests {
     fn text_schema_works() {
         let conn = db_setup();
         let server = Server::new();
-        let text = models::texts::NewText {
-            title: "falafel_title".to_string(),
-            slug: "falafel_slug".to_string(),
-            authors: "falafel_authors".to_string(),
-            description: "".to_string(),
-        }.save(&conn).unwrap();
+        let text = create_text(&conn, "falafel");
         let mut req = TextsQuery::new();
         req.set_id(text.id.to_string());
 
@@ -159,5 +160,32 @@ mod tests {
             Ok(_) => panic!("Found without a text id"),
             Err(_) => panic!("Wrong error"),
         }
+    }
+
+    #[test]
+    fn patch_schema_works() {
+        let conn = db_setup();
+        let schema = create_schema(&conn, "lettuce");
+        let mut req = Schema::new();
+        req.set_id(schema.id.to_string());
+        req.set_paths(RepeatedField::from_vec(vec!("tomato".to_string())));
+
+        let res = Server::new().patch_schema(req).unwrap();
+
+        assert_eq!(res.paths.to_vec(), &["tomato"]);
+    }
+
+    fn create_text(conn: &PgConnection, slug: &str) -> models::texts::Text {
+        models::texts::NewText {
+            title: "falafel_title".to_string(),
+            slug: slug.to_string(),
+            authors: "falafel_authors".to_string(),
+            description: "".to_string(),
+        }.save(&conn).unwrap()
+    }
+
+    fn create_schema(conn: &PgConnection, slug: &str) -> models::schemas::Schema {
+        let text = create_text(conn, slug);
+        models::schemas::Schema::for_text(conn, text.id).unwrap()
     }
 }

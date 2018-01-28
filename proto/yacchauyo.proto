@@ -6,7 +6,9 @@ service Yacchauyo {
   rpc TextsIndex (TextsQuery) returns (Texts);
   rpc CreateText (Text) returns (Text);
   rpc PatchText (Text) returns (Text);
+
   rpc TextSchema (TextsQuery) returns (Schema);
+  rpc PatchSchema (Schema) returns (Schema);
 }
 
 message Text {
