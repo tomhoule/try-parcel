@@ -5,15 +5,15 @@ use std::convert::From;
 use diesel::prelude::*;
 use db_schema::*;
 
-#[derive(Queryable, Debug, PartialEq)]
+#[derive(Identifiable, Queryable, Debug, PartialEq)]
 pub struct Text {
-    id: Uuid,
-    title: String,
-    slug: String,
-    authors: String,
-    description: String,
-    created_at: DateTime<Utc>,
-    updated_at: DateTime<Utc>,
+    pub id: Uuid,
+    pub title: String,
+    pub slug: String,
+    pub authors: String,
+    pub description: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl Text {
@@ -34,7 +34,7 @@ impl From<Text> for proto::Text {
             ..
         } = txt;
         let mut p = proto::Text::new();
-        p.set_id(format!("{}", id));
+        p.set_id(id.to_string());
         p.set_title(title);
         p.set_authors(authors);
         p.set_description(description);
@@ -160,7 +160,7 @@ mod tests {
 
         let new = NewText::from(proto).save(&conn).unwrap();
         let mut patch = proto::Text::new();
-        patch.id = format!("{}", new.id);
+        patch.id = new.id.to_string();
         let updated = TextPatch::from(patch).save(&conn).unwrap();
         assert_eq!(new, updated);
     }

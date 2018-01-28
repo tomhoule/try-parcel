@@ -2,6 +2,7 @@
 // file: yacchauyo.proto
 
 import * as yacchauyo_pb from "./yacchauyo_pb";
+import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 export class Yacchauyo {
   static serviceName = "Yacchauyo";
 }
@@ -29,5 +30,13 @@ export namespace Yacchauyo {
     static readonly responseStream = false;
     static readonly requestType = yacchauyo_pb.Text;
     static readonly responseType = yacchauyo_pb.Text;
+  }
+  export class TextSchema {
+    static readonly methodName = "TextSchema";
+    static readonly service = Yacchauyo;
+    static readonly requestStream = false;
+    static readonly responseStream = false;
+    static readonly requestType = yacchauyo_pb.TextsQuery;
+    static readonly responseType = yacchauyo_pb.Schema;
   }
 }

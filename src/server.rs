@@ -3,20 +3,14 @@ use diesel;
 use r2d2;
 use diesel::prelude::*;
 use configure::Configure;
-use rpc::yacchauyo::{Text, Texts, TextsQuery};
+use rpc::yacchauyo::{Text, Texts, TextsQuery, Schema};
 use models;
 use error::Error;
-use protobuf::RepeatedField;
+use utils::*;
 
 #[derive(Clone)]
 pub struct Server {
     pool: r2d2::Pool<diesel::r2d2::ConnectionManager<PgConnection>>,
-}
-
-fn fill_repeated<Proto: From<T>, T>(target: &mut RepeatedField<Proto>, existing: Vec<T>) {
-    for element in existing.into_iter() {
-        target.push(element.into())
-    }
 }
 
 impl Server {
@@ -43,6 +37,12 @@ impl Server {
     pub fn patch_text(&self, req: Text) -> Result<Text, Error> {
         let conn = self.pool.get()?;
         Ok(models::texts::TextPatch::from(req).save(&conn)?.into())
+    }
+
+    pub fn text_schema(&self, req: TextsQuery) -> Result<Schema, Error> {
+        let id: ::uuid::Uuid = req.id.parse().map_err(|_| Error::InvalidInput)?;
+        let conn = self.pool.get()?;
+        Ok(models::schemas::Schema::for_text(&conn, id)?.into())
     }
 }
 
@@ -131,5 +131,33 @@ mod tests {
             .get_result(&conn)
             .unwrap();
         assert_eq!(count, 1);
+    }
+
+    #[test]
+    fn text_schema_works() {
+        let conn = db_setup();
+        let server = Server::new();
+        let text = models::texts::NewText {
+            title: "falafel_title".to_string(),
+            slug: "falafel_slug".to_string(),
+            authors: "falafel_authors".to_string(),
+            description: "".to_string(),
+        }.save(&conn).unwrap();
+        let mut req = TextsQuery::new();
+        req.set_id(text.id.to_string());
+
+        let res = server.text_schema(req).unwrap();
+
+        assert_eq!(res.text_id, text.id.to_string());
+    }
+
+    #[test]
+    fn text_schema_without_id_returns_invalid_input() {
+        let req = TextsQuery::new();
+        match Server::new().text_schema(req) {
+            Err(Error::InvalidInput) => (),
+            Ok(_) => panic!("Found without a text id"),
+            Err(_) => panic!("Wrong error"),
+        }
     }
 }

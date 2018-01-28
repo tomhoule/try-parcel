@@ -63,6 +63,7 @@ impl Yacchauyo for Server {
     plug!(texts_index, TextsQuery, Texts);
     plug!(create_text, Text, Text);
     plug!(patch_text, Text, Text);
+    plug!(text_schema, TextsQuery, Schema);
 }
 
 pub fn start() {

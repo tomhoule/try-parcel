@@ -2,6 +2,7 @@
 // file: yacchauyo.proto
 
 import * as jspb from "google-protobuf";
+import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 export class Text extends jspb.Message {
   getId(): string;
@@ -82,6 +83,42 @@ export namespace TextsQuery {
   export type AsObject = {
     id: string,
     title: string,
+  }
+}
+
+export class Schema extends jspb.Message {
+  getId(): string;
+  setId(value: string): void;
+
+  getTextId(): string;
+  setTextId(value: string): void;
+
+  clearPathsList(): void;
+  getPathsList(): Array<string>;
+  setPathsList(value: Array<string>): void;
+  addPaths(value: string, index?: number): string;
+
+  hasCreatedAt(): boolean;
+  clearCreatedAt(): void;
+  getCreatedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setCreatedAt(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Schema.AsObject;
+  static toObject(includeInstance: boolean, msg: Schema): Schema.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Schema, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Schema;
+  static deserializeBinaryFromReader(message: Schema, reader: jspb.BinaryReader): Schema;
+}
+
+export namespace Schema {
+  export type AsObject = {
+    id: string,
+    textId: string,
+    pathsList: Array<string>,
+    createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
   }
 }
 

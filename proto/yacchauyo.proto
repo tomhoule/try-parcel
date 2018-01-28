@@ -1,9 +1,12 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 service Yacchauyo {
   rpc TextsIndex (TextsQuery) returns (Texts);
   rpc CreateText (Text) returns (Text);
   rpc PatchText (Text) returns (Text);
+  rpc TextSchema (TextsQuery) returns (Schema);
 }
 
 message Text {
@@ -21,4 +24,11 @@ message Texts {
 message TextsQuery {
   string id = 1;
   string title = 2;
+}
+
+message Schema {
+  string id = 1;
+  string text_id = 2;
+  repeated string paths = 3;
+  google.protobuf.Timestamp created_at = 4;
 }

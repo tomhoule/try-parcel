@@ -806,57 +806,420 @@ impl ::protobuf::reflect::ProtobufValue for TextsQuery {
     }
 }
 
+#[derive(PartialEq,Clone,Default)]
+pub struct Schema {
+    // message fields
+    pub id: ::std::string::String,
+    pub text_id: ::std::string::String,
+    pub paths: ::protobuf::RepeatedField<::std::string::String>,
+    pub created_at: ::protobuf::SingularPtrField<::protobuf::well_known_types::Timestamp>,
+    // special fields
+    unknown_fields: ::protobuf::UnknownFields,
+    cached_size: ::protobuf::CachedSize,
+}
+
+// see codegen.rs for the explanation why impl Sync explicitly
+unsafe impl ::std::marker::Sync for Schema {}
+
+impl Schema {
+    pub fn new() -> Schema {
+        ::std::default::Default::default()
+    }
+
+    pub fn default_instance() -> &'static Schema {
+        static mut instance: ::protobuf::lazy::Lazy<Schema> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const Schema,
+        };
+        unsafe {
+            instance.get(Schema::new)
+        }
+    }
+
+    // string id = 1;
+
+    pub fn clear_id(&mut self) {
+        self.id.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_id(&mut self, v: ::std::string::String) {
+        self.id = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_id(&mut self) -> &mut ::std::string::String {
+        &mut self.id
+    }
+
+    // Take field
+    pub fn take_id(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.id, ::std::string::String::new())
+    }
+
+    pub fn get_id(&self) -> &str {
+        &self.id
+    }
+
+    fn get_id_for_reflect(&self) -> &::std::string::String {
+        &self.id
+    }
+
+    fn mut_id_for_reflect(&mut self) -> &mut ::std::string::String {
+        &mut self.id
+    }
+
+    // string text_id = 2;
+
+    pub fn clear_text_id(&mut self) {
+        self.text_id.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_text_id(&mut self, v: ::std::string::String) {
+        self.text_id = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_text_id(&mut self) -> &mut ::std::string::String {
+        &mut self.text_id
+    }
+
+    // Take field
+    pub fn take_text_id(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.text_id, ::std::string::String::new())
+    }
+
+    pub fn get_text_id(&self) -> &str {
+        &self.text_id
+    }
+
+    fn get_text_id_for_reflect(&self) -> &::std::string::String {
+        &self.text_id
+    }
+
+    fn mut_text_id_for_reflect(&mut self) -> &mut ::std::string::String {
+        &mut self.text_id
+    }
+
+    // repeated string paths = 3;
+
+    pub fn clear_paths(&mut self) {
+        self.paths.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_paths(&mut self, v: ::protobuf::RepeatedField<::std::string::String>) {
+        self.paths = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_paths(&mut self) -> &mut ::protobuf::RepeatedField<::std::string::String> {
+        &mut self.paths
+    }
+
+    // Take field
+    pub fn take_paths(&mut self) -> ::protobuf::RepeatedField<::std::string::String> {
+        ::std::mem::replace(&mut self.paths, ::protobuf::RepeatedField::new())
+    }
+
+    pub fn get_paths(&self) -> &[::std::string::String] {
+        &self.paths
+    }
+
+    fn get_paths_for_reflect(&self) -> &::protobuf::RepeatedField<::std::string::String> {
+        &self.paths
+    }
+
+    fn mut_paths_for_reflect(&mut self) -> &mut ::protobuf::RepeatedField<::std::string::String> {
+        &mut self.paths
+    }
+
+    // .google.protobuf.Timestamp created_at = 4;
+
+    pub fn clear_created_at(&mut self) {
+        self.created_at.clear();
+    }
+
+    pub fn has_created_at(&self) -> bool {
+        self.created_at.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_created_at(&mut self, v: ::protobuf::well_known_types::Timestamp) {
+        self.created_at = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_created_at(&mut self) -> &mut ::protobuf::well_known_types::Timestamp {
+        if self.created_at.is_none() {
+            self.created_at.set_default();
+        }
+        self.created_at.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_created_at(&mut self) -> ::protobuf::well_known_types::Timestamp {
+        self.created_at.take().unwrap_or_else(|| ::protobuf::well_known_types::Timestamp::new())
+    }
+
+    pub fn get_created_at(&self) -> &::protobuf::well_known_types::Timestamp {
+        self.created_at.as_ref().unwrap_or_else(|| ::protobuf::well_known_types::Timestamp::default_instance())
+    }
+
+    fn get_created_at_for_reflect(&self) -> &::protobuf::SingularPtrField<::protobuf::well_known_types::Timestamp> {
+        &self.created_at
+    }
+
+    fn mut_created_at_for_reflect(&mut self) -> &mut ::protobuf::SingularPtrField<::protobuf::well_known_types::Timestamp> {
+        &mut self.created_at
+    }
+}
+
+impl ::protobuf::Message for Schema {
+    fn is_initialized(&self) -> bool {
+        for v in &self.created_at {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.id)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.text_id)?;
+                },
+                3 => {
+                    ::protobuf::rt::read_repeated_string_into(wire_type, is, &mut self.paths)?;
+                },
+                4 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.created_at)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.id.is_empty() {
+            my_size += ::protobuf::rt::string_size(1, &self.id);
+        }
+        if !self.text_id.is_empty() {
+            my_size += ::protobuf::rt::string_size(2, &self.text_id);
+        }
+        for value in &self.paths {
+            my_size += ::protobuf::rt::string_size(3, &value);
+        };
+        if let Some(ref v) = self.created_at.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if !self.id.is_empty() {
+            os.write_string(1, &self.id)?;
+        }
+        if !self.text_id.is_empty() {
+            os.write_string(2, &self.text_id)?;
+        }
+        for v in &self.paths {
+            os.write_string(3, &v)?;
+        };
+        if let Some(ref v) = self.created_at.as_ref() {
+            os.write_tag(4, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &::std::any::Any {
+        self as &::std::any::Any
+    }
+    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
+        self as &mut ::std::any::Any
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        ::protobuf::MessageStatic::descriptor_static(None::<Self>)
+    }
+}
+
+impl ::protobuf::MessageStatic for Schema {
+    fn new() -> Schema {
+        Schema::new()
+    }
+
+    fn descriptor_static(_: ::std::option::Option<Schema>) -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "id",
+                    Schema::get_id_for_reflect,
+                    Schema::mut_id_for_reflect,
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "text_id",
+                    Schema::get_text_id_for_reflect,
+                    Schema::mut_text_id_for_reflect,
+                ));
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "paths",
+                    Schema::get_paths_for_reflect,
+                    Schema::mut_paths_for_reflect,
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<::protobuf::well_known_types::Timestamp>>(
+                    "created_at",
+                    Schema::get_created_at_for_reflect,
+                    Schema::mut_created_at_for_reflect,
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<Schema>(
+                    "Schema",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+}
+
+impl ::protobuf::Clear for Schema {
+    fn clear(&mut self) {
+        self.clear_id();
+        self.clear_text_id();
+        self.clear_paths();
+        self.clear_created_at();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for Schema {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for Schema {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x15proto/yacchauyo.proto\"|\n\x04Text\x12\x0e\n\x02id\x18\x01\x20\x01\
-    (\tR\x02id\x12\x14\n\x05title\x18\x02\x20\x01(\tR\x05title\x12\x12\n\x04\
-    slug\x18\x03\x20\x01(\tR\x04slug\x12\x18\n\x07authors\x18\x04\x20\x01(\t\
-    R\x07authors\x12\x20\n\x0bdescription\x18\x05\x20\x01(\tR\x0bdescription\
-    \"$\n\x05Texts\x12\x1b\n\x05texts\x18\x01\x20\x03(\x0b2\x05.TextR\x05tex\
-    ts\"2\n\nTextsQuery\x12\x0e\n\x02id\x18\x01\x20\x01(\tR\x02id\x12\x14\n\
-    \x05title\x18\x02\x20\x01(\tR\x05title2e\n\tYacchauyo\x12!\n\nTextsIndex\
-    \x12\x0b.TextsQuery\x1a\x06.Texts\x12\x1a\n\nCreateText\x12\x05.Text\x1a\
-    \x05.Text\x12\x19\n\tPatchText\x12\x05.Text\x1a\x05.TextJ\xc6\x06\n\x06\
-    \x12\x04\0\0\x17\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\n\n\x02\x06\0\x12\
-    \x04\x02\0\x06\x01\n\n\n\x03\x06\0\x01\x12\x03\x02\x08\x11\n\x0b\n\x04\
-    \x06\0\x02\0\x12\x03\x03\x02.\n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x03\
-    \x06\x10\n\x0c\n\x05\x06\0\x02\0\x02\x12\x03\x03\x12\x1c\n\x0c\n\x05\x06\
-    \0\x02\0\x03\x12\x03\x03',\n\x0b\n\x04\x06\0\x02\x01\x12\x03\x04\x02'\n\
-    \x0c\n\x05\x06\0\x02\x01\x01\x12\x03\x04\x06\x10\n\x0c\n\x05\x06\0\x02\
-    \x01\x02\x12\x03\x04\x12\x16\n\x0c\n\x05\x06\0\x02\x01\x03\x12\x03\x04!%\
-    \n\x0b\n\x04\x06\0\x02\x02\x12\x03\x05\x02&\n\x0c\n\x05\x06\0\x02\x02\
-    \x01\x12\x03\x05\x06\x0f\n\x0c\n\x05\x06\0\x02\x02\x02\x12\x03\x05\x11\
-    \x15\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\x05\x20$\n\n\n\x02\x04\0\x12\
-    \x04\x08\0\x0e\x01\n\n\n\x03\x04\0\x01\x12\x03\x08\x08\x0c\n\x0b\n\x04\
-    \x04\0\x02\0\x12\x03\t\x02\x10\n\r\n\x05\x04\0\x02\0\x04\x12\x04\t\x02\
-    \x08\x0e\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\t\x02\x08\n\x0c\n\x05\x04\0\
-    \x02\0\x01\x12\x03\t\t\x0b\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\t\x0e\x0f\
-    \n\x0b\n\x04\x04\0\x02\x01\x12\x03\n\x02\x13\n\r\n\x05\x04\0\x02\x01\x04\
-    \x12\x04\n\x02\t\x10\n\x0c\n\x05\x04\0\x02\x01\x05\x12\x03\n\x02\x08\n\
-    \x0c\n\x05\x04\0\x02\x01\x01\x12\x03\n\t\x0e\n\x0c\n\x05\x04\0\x02\x01\
-    \x03\x12\x03\n\x11\x12\n\x0b\n\x04\x04\0\x02\x02\x12\x03\x0b\x02\x12\n\r\
-    \n\x05\x04\0\x02\x02\x04\x12\x04\x0b\x02\n\x13\n\x0c\n\x05\x04\0\x02\x02\
-    \x05\x12\x03\x0b\x02\x08\n\x0c\n\x05\x04\0\x02\x02\x01\x12\x03\x0b\t\r\n\
-    \x0c\n\x05\x04\0\x02\x02\x03\x12\x03\x0b\x10\x11\n\x0b\n\x04\x04\0\x02\
-    \x03\x12\x03\x0c\x02\x15\n\r\n\x05\x04\0\x02\x03\x04\x12\x04\x0c\x02\x0b\
-    \x12\n\x0c\n\x05\x04\0\x02\x03\x05\x12\x03\x0c\x02\x08\n\x0c\n\x05\x04\0\
-    \x02\x03\x01\x12\x03\x0c\t\x10\n\x0c\n\x05\x04\0\x02\x03\x03\x12\x03\x0c\
-    \x13\x14\n\x0b\n\x04\x04\0\x02\x04\x12\x03\r\x02\x19\n\r\n\x05\x04\0\x02\
-    \x04\x04\x12\x04\r\x02\x0c\x15\n\x0c\n\x05\x04\0\x02\x04\x05\x12\x03\r\
-    \x02\x08\n\x0c\n\x05\x04\0\x02\x04\x01\x12\x03\r\t\x14\n\x0c\n\x05\x04\0\
-    \x02\x04\x03\x12\x03\r\x17\x18\n\n\n\x02\x04\x01\x12\x04\x10\0\x12\x01\n\
-    \n\n\x03\x04\x01\x01\x12\x03\x10\x08\r\n\x0b\n\x04\x04\x01\x02\0\x12\x03\
-    \x11\x02\x1a\n\x0c\n\x05\x04\x01\x02\0\x04\x12\x03\x11\x02\n\n\x0c\n\x05\
-    \x04\x01\x02\0\x06\x12\x03\x11\x0b\x0f\n\x0c\n\x05\x04\x01\x02\0\x01\x12\
-    \x03\x11\x10\x15\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x11\x18\x19\n\n\n\
-    \x02\x04\x02\x12\x04\x14\0\x17\x01\n\n\n\x03\x04\x02\x01\x12\x03\x14\x08\
-    \x12\n\x0b\n\x04\x04\x02\x02\0\x12\x03\x15\x02\x10\n\r\n\x05\x04\x02\x02\
-    \0\x04\x12\x04\x15\x02\x14\x14\n\x0c\n\x05\x04\x02\x02\0\x05\x12\x03\x15\
-    \x02\x08\n\x0c\n\x05\x04\x02\x02\0\x01\x12\x03\x15\t\x0b\n\x0c\n\x05\x04\
-    \x02\x02\0\x03\x12\x03\x15\x0e\x0f\n\x0b\n\x04\x04\x02\x02\x01\x12\x03\
-    \x16\x02\x13\n\r\n\x05\x04\x02\x02\x01\x04\x12\x04\x16\x02\x15\x10\n\x0c\
-    \n\x05\x04\x02\x02\x01\x05\x12\x03\x16\x02\x08\n\x0c\n\x05\x04\x02\x02\
-    \x01\x01\x12\x03\x16\t\x0e\n\x0c\n\x05\x04\x02\x02\x01\x03\x12\x03\x16\
-    \x11\x12b\x06proto3\
+    \n\x15proto/yacchauyo.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"|\n\
+    \x04Text\x12\x0e\n\x02id\x18\x01\x20\x01(\tR\x02id\x12\x14\n\x05title\
+    \x18\x02\x20\x01(\tR\x05title\x12\x12\n\x04slug\x18\x03\x20\x01(\tR\x04s\
+    lug\x12\x18\n\x07authors\x18\x04\x20\x01(\tR\x07authors\x12\x20\n\x0bdes\
+    cription\x18\x05\x20\x01(\tR\x0bdescription\"$\n\x05Texts\x12\x1b\n\x05t\
+    exts\x18\x01\x20\x03(\x0b2\x05.TextR\x05texts\"2\n\nTextsQuery\x12\x0e\n\
+    \x02id\x18\x01\x20\x01(\tR\x02id\x12\x14\n\x05title\x18\x02\x20\x01(\tR\
+    \x05title\"\x82\x01\n\x06Schema\x12\x0e\n\x02id\x18\x01\x20\x01(\tR\x02i\
+    d\x12\x17\n\x07text_id\x18\x02\x20\x01(\tR\x06textId\x12\x14\n\x05paths\
+    \x18\x03\x20\x03(\tR\x05paths\x129\n\ncreated_at\x18\x04\x20\x01(\x0b2\
+    \x1a.google.protobuf.TimestampR\tcreatedAt2\x89\x01\n\tYacchauyo\x12!\n\
+    \nTextsIndex\x12\x0b.TextsQuery\x1a\x06.Texts\x12\x1a\n\nCreateText\x12\
+    \x05.Text\x1a\x05.Text\x12\x19\n\tPatchText\x12\x05.Text\x1a\x05.Text\
+    \x12\"\n\nTextSchema\x12\x0b.TextsQuery\x1a\x07.SchemaJ\xb7\t\n\x06\x12\
+    \x04\0\0!\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\x03\0\x12\x03\
+    \x02\x07(\n\n\n\x02\x06\0\x12\x04\x04\0\t\x01\n\n\n\x03\x06\0\x01\x12\
+    \x03\x04\x08\x11\n\x0b\n\x04\x06\0\x02\0\x12\x03\x05\x02.\n\x0c\n\x05\
+    \x06\0\x02\0\x01\x12\x03\x05\x06\x10\n\x0c\n\x05\x06\0\x02\0\x02\x12\x03\
+    \x05\x12\x1c\n\x0c\n\x05\x06\0\x02\0\x03\x12\x03\x05',\n\x0b\n\x04\x06\0\
+    \x02\x01\x12\x03\x06\x02'\n\x0c\n\x05\x06\0\x02\x01\x01\x12\x03\x06\x06\
+    \x10\n\x0c\n\x05\x06\0\x02\x01\x02\x12\x03\x06\x12\x16\n\x0c\n\x05\x06\0\
+    \x02\x01\x03\x12\x03\x06!%\n\x0b\n\x04\x06\0\x02\x02\x12\x03\x07\x02&\n\
+    \x0c\n\x05\x06\0\x02\x02\x01\x12\x03\x07\x06\x0f\n\x0c\n\x05\x06\0\x02\
+    \x02\x02\x12\x03\x07\x11\x15\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\x07\
+    \x20$\n\x0b\n\x04\x06\0\x02\x03\x12\x03\x08\x02/\n\x0c\n\x05\x06\0\x02\
+    \x03\x01\x12\x03\x08\x06\x10\n\x0c\n\x05\x06\0\x02\x03\x02\x12\x03\x08\
+    \x12\x1c\n\x0c\n\x05\x06\0\x02\x03\x03\x12\x03\x08'-\n\n\n\x02\x04\0\x12\
+    \x04\x0b\0\x11\x01\n\n\n\x03\x04\0\x01\x12\x03\x0b\x08\x0c\n\x0b\n\x04\
+    \x04\0\x02\0\x12\x03\x0c\x02\x10\n\r\n\x05\x04\0\x02\0\x04\x12\x04\x0c\
+    \x02\x0b\x0e\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\x0c\x02\x08\n\x0c\n\x05\
+    \x04\0\x02\0\x01\x12\x03\x0c\t\x0b\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\
+    \x0c\x0e\x0f\n\x0b\n\x04\x04\0\x02\x01\x12\x03\r\x02\x13\n\r\n\x05\x04\0\
+    \x02\x01\x04\x12\x04\r\x02\x0c\x10\n\x0c\n\x05\x04\0\x02\x01\x05\x12\x03\
+    \r\x02\x08\n\x0c\n\x05\x04\0\x02\x01\x01\x12\x03\r\t\x0e\n\x0c\n\x05\x04\
+    \0\x02\x01\x03\x12\x03\r\x11\x12\n\x0b\n\x04\x04\0\x02\x02\x12\x03\x0e\
+    \x02\x12\n\r\n\x05\x04\0\x02\x02\x04\x12\x04\x0e\x02\r\x13\n\x0c\n\x05\
+    \x04\0\x02\x02\x05\x12\x03\x0e\x02\x08\n\x0c\n\x05\x04\0\x02\x02\x01\x12\
+    \x03\x0e\t\r\n\x0c\n\x05\x04\0\x02\x02\x03\x12\x03\x0e\x10\x11\n\x0b\n\
+    \x04\x04\0\x02\x03\x12\x03\x0f\x02\x15\n\r\n\x05\x04\0\x02\x03\x04\x12\
+    \x04\x0f\x02\x0e\x12\n\x0c\n\x05\x04\0\x02\x03\x05\x12\x03\x0f\x02\x08\n\
+    \x0c\n\x05\x04\0\x02\x03\x01\x12\x03\x0f\t\x10\n\x0c\n\x05\x04\0\x02\x03\
+    \x03\x12\x03\x0f\x13\x14\n\x0b\n\x04\x04\0\x02\x04\x12\x03\x10\x02\x19\n\
+    \r\n\x05\x04\0\x02\x04\x04\x12\x04\x10\x02\x0f\x15\n\x0c\n\x05\x04\0\x02\
+    \x04\x05\x12\x03\x10\x02\x08\n\x0c\n\x05\x04\0\x02\x04\x01\x12\x03\x10\t\
+    \x14\n\x0c\n\x05\x04\0\x02\x04\x03\x12\x03\x10\x17\x18\n\n\n\x02\x04\x01\
+    \x12\x04\x13\0\x15\x01\n\n\n\x03\x04\x01\x01\x12\x03\x13\x08\r\n\x0b\n\
+    \x04\x04\x01\x02\0\x12\x03\x14\x02\x1a\n\x0c\n\x05\x04\x01\x02\0\x04\x12\
+    \x03\x14\x02\n\n\x0c\n\x05\x04\x01\x02\0\x06\x12\x03\x14\x0b\x0f\n\x0c\n\
+    \x05\x04\x01\x02\0\x01\x12\x03\x14\x10\x15\n\x0c\n\x05\x04\x01\x02\0\x03\
+    \x12\x03\x14\x18\x19\n\n\n\x02\x04\x02\x12\x04\x17\0\x1a\x01\n\n\n\x03\
+    \x04\x02\x01\x12\x03\x17\x08\x12\n\x0b\n\x04\x04\x02\x02\0\x12\x03\x18\
+    \x02\x10\n\r\n\x05\x04\x02\x02\0\x04\x12\x04\x18\x02\x17\x14\n\x0c\n\x05\
+    \x04\x02\x02\0\x05\x12\x03\x18\x02\x08\n\x0c\n\x05\x04\x02\x02\0\x01\x12\
+    \x03\x18\t\x0b\n\x0c\n\x05\x04\x02\x02\0\x03\x12\x03\x18\x0e\x0f\n\x0b\n\
+    \x04\x04\x02\x02\x01\x12\x03\x19\x02\x13\n\r\n\x05\x04\x02\x02\x01\x04\
+    \x12\x04\x19\x02\x18\x10\n\x0c\n\x05\x04\x02\x02\x01\x05\x12\x03\x19\x02\
+    \x08\n\x0c\n\x05\x04\x02\x02\x01\x01\x12\x03\x19\t\x0e\n\x0c\n\x05\x04\
+    \x02\x02\x01\x03\x12\x03\x19\x11\x12\n\n\n\x02\x04\x03\x12\x04\x1c\0!\
+    \x01\n\n\n\x03\x04\x03\x01\x12\x03\x1c\x08\x0e\n\x0b\n\x04\x04\x03\x02\0\
+    \x12\x03\x1d\x02\x10\n\r\n\x05\x04\x03\x02\0\x04\x12\x04\x1d\x02\x1c\x10\
+    \n\x0c\n\x05\x04\x03\x02\0\x05\x12\x03\x1d\x02\x08\n\x0c\n\x05\x04\x03\
+    \x02\0\x01\x12\x03\x1d\t\x0b\n\x0c\n\x05\x04\x03\x02\0\x03\x12\x03\x1d\
+    \x0e\x0f\n\x0b\n\x04\x04\x03\x02\x01\x12\x03\x1e\x02\x15\n\r\n\x05\x04\
+    \x03\x02\x01\x04\x12\x04\x1e\x02\x1d\x10\n\x0c\n\x05\x04\x03\x02\x01\x05\
+    \x12\x03\x1e\x02\x08\n\x0c\n\x05\x04\x03\x02\x01\x01\x12\x03\x1e\t\x10\n\
+    \x0c\n\x05\x04\x03\x02\x01\x03\x12\x03\x1e\x13\x14\n\x0b\n\x04\x04\x03\
+    \x02\x02\x12\x03\x1f\x02\x1c\n\x0c\n\x05\x04\x03\x02\x02\x04\x12\x03\x1f\
+    \x02\n\n\x0c\n\x05\x04\x03\x02\x02\x05\x12\x03\x1f\x0b\x11\n\x0c\n\x05\
+    \x04\x03\x02\x02\x01\x12\x03\x1f\x12\x17\n\x0c\n\x05\x04\x03\x02\x02\x03\
+    \x12\x03\x1f\x1a\x1b\n\x0b\n\x04\x04\x03\x02\x03\x12\x03\x20\x02+\n\r\n\
+    \x05\x04\x03\x02\x03\x04\x12\x04\x20\x02\x1f\x1c\n\x0c\n\x05\x04\x03\x02\
+    \x03\x06\x12\x03\x20\x02\x1b\n\x0c\n\x05\x04\x03\x02\x03\x01\x12\x03\x20\
+    \x1c&\n\x0c\n\x05\x04\x03\x02\x03\x03\x12\x03\x20)*b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
