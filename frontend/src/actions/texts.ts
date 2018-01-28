@@ -1,8 +1,10 @@
 import { actionCreatorFactory } from 'typescript-fsa'
-import * as rpc from '../rpc/yacchauyo_pb'
+import * as proto from '../rpc/yacchauyo_pb'
 
 const factory = actionCreatorFactory('texts')
 
 export const texts = {
-  fetchIndex: factory.async<{}, rpc.Text, {}>('FETCH_INDEX')
+  create: factory.async<proto.Text, proto.Text, {}>('CREATE'),
+  fetchIndex: factory.async<proto.TextsQuery, proto.Texts, {}>('FETCH_INDEX'),
+  patch: factory.async<proto.Text, proto.Text, {}>('PATCH'),
 }
