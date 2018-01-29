@@ -4,10 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "lint": "tslint --project .",
     "start": "parcel index.html",
     "test": "jest",
-    "watch-test": "jest --watch",
-    "lint": "tslint --project ."
+    "typecheck": "tsc --noEmit --watch",
+    "watch-test": "jest --watch"
   },
   "jest": {
     "transform": {
@@ -29,6 +30,7 @@
     "@types/enzyme-adapter-react-16": "^1.0.1",
     "@types/jest": "^22.1.0",
     "@types/react-router": "^4.0.21",
+    "@types/react-router-dom": "^4.2.3",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "jest": "^22.1.4",

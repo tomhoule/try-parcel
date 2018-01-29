@@ -1,9 +1,9 @@
 import { call } from 'redux-saga/effects'
-import * as sagas from './root'
-import { texts } from '../actions/texts'
 import { schemas } from '../actions/schemas'
-import * as backend from '../rpc/yacchauyo_pb_service'
+import { texts } from '../actions/texts'
 import * as proto from '../rpc/yacchauyo_pb'
+import * as backend from '../rpc/yacchauyo_pb_service'
+import * as sagas from './root'
 
 describe('rootSaga', () => {
   const saga = sagas.rootSaga()
@@ -41,14 +41,15 @@ describe('rootSaga', () => {
 })
 
 describe('textsIndex', () => {
-  const action = texts.fetchIndex.started({})
+  const req = new proto.TextsQuery()
+  const action = texts.fetchIndex.started(req)
   const saga = sagas.textsIndex(action)
 
   it('calls the api', () => {
     const next = saga.next()
     expect(next.value)
       .toEqual(
-        call(sagas.rpcCall, backend.Yacchauyo.TextsIndex, new proto.TextsQuery()  )
+        call(sagas.rpcCall, backend.Yacchauyo.TextsIndex, new proto.TextsQuery()),
       )
   })
 

@@ -1,8 +1,9 @@
 import * as React from 'react'
-import * as ReactRouter from 'react-router'
 import { connect } from 'react-redux'
+import * as ReactRouter from 'react-router'
 
 import { texts } from '../actions/texts'
+import * as proto from '../rpc/yacchauyo_pb'
 
 interface DispatchProps {
   fetchIndex: typeof texts.fetchIndex.started
@@ -13,7 +14,7 @@ type Props = DispatchProps & OwnProps
 
 export class Texts extends React.Component<Props> {
   componentWillMount() {
-    this.props.fetchIndex({})
+    this.props.fetchIndex(new proto.TextsQuery())
   }
 
   render() {
@@ -30,5 +31,5 @@ export default connect<{}, DispatchProps, OwnProps>(
   null,
   {
     fetchIndex: texts.fetchIndex.started,
-  }
+  },
 )(Texts)

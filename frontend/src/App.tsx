@@ -1,10 +1,10 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as ReactRedux from 'react-redux'
-import { BrowserRouter } from 'react-router-dom'
 import { Route } from 'react-router'
-import { store } from './store'
+import { BrowserRouter } from 'react-router-dom'
 import Texts from './components/Texts'
+import { store } from './store'
 
 export class App extends React.Component<{}, {}> {
   render() {
@@ -22,6 +22,6 @@ export function render() {
     <ReactRedux.Provider store={store}>
       <App />
     </ReactRedux.Provider>,
-    root
+    root,
   )
 }

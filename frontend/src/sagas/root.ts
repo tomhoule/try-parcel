@@ -1,13 +1,13 @@
+import { Message } from 'google-protobuf';
+import { Code, grpc } from 'grpc-web-client'
 import { SagaIterator } from 'redux-saga'
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { texts } from '../actions/texts'
-import { schemas } from '../actions/schemas'
 import { Action, AsyncActionCreators } from 'typescript-fsa'
+import { schemas } from '../actions/schemas'
+import { texts } from '../actions/texts'
+import { API_URL } from '../config'
 import * as proto from '../rpc/yacchauyo_pb'
 import * as backend from '../rpc/yacchauyo_pb_service'
-import { grpc, Code } from 'grpc-web-client'
-import { API_URL } from '../config'
-import { Message } from 'google-protobuf';
 
 export function rpcCall<
   Request extends Message,
@@ -15,19 +15,18 @@ export function rpcCall<
   Method extends grpc.UnaryMethodDefinition<Request, Message>
   >(
   method: Method,
-  request: Request
-  ): Promise<grpc.UnaryOutput<Message>> {
+  request: Request,
+): Promise<grpc.UnaryOutput<Message>> {
   return new Promise((resolve, reject) => grpc.unary(method, {
-    request,
     host: API_URL,
     onEnd: (message) => {
       if (message.status !== Code.OK) {
-        console.log('Error response: ', message)
         reject(message)
       } else {
         resolve(message)
       }
-    }
+    },
+    request,
   }))
 }
 
@@ -35,7 +34,7 @@ export function buckle<
   S,
   D,
   F
->(
+  >(
   actionCreators: AsyncActionCreators<S, D, F>,
   inner: (action: Action<S>) => SagaIterator,
 ): (action: Action<S>) => SagaIterator {
