@@ -31,8 +31,4 @@ table! {
 joinable!(fragments -> texts (text_id));
 joinable!(schemas -> texts (text_id));
 
-allow_tables_to_appear_in_same_query!(
-    fragments,
-    schemas,
-    texts,
-);
+allow_tables_to_appear_in_same_query!(fragments, schemas, texts,);

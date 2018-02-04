@@ -1,3 +1,6 @@
+#![feature(plugin)]
+#![plugin(rocket_codegen)]
+
 extern crate chrono;
 #[macro_use]
 extern crate configure;
@@ -10,6 +13,7 @@ extern crate futures;
 extern crate grpcio;
 extern crate protobuf;
 extern crate r2d2;
+extern crate rocket;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
@@ -23,7 +27,12 @@ pub mod rpc;
 #[cfg(test)]
 pub mod test_utils;
 pub mod utils;
+pub mod web;
 
 pub fn start_rpc() {
     rpc::start();
+}
+
+pub fn start_web() {
+    web::start::start().launch();
 }
