@@ -3,5 +3,5 @@ extern crate yacchauyo;
 
 fn main() {
     dotenv::dotenv().ok();
-    yacchauyo::start();
+    yacchauyo::start_rpc();
 }

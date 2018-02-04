@@ -7,7 +7,7 @@ extern crate yacchauyo;
 
 use futures::Future;
 use yacchauyo::rpc::yacchauyo_grpc::YacchauyoClient;
-use yacchauyo::server::Server;
+use yacchauyo::rpc::server::Server;
 use std::sync::Arc;
 use yacchauyo::rpc::yacchauyo as proto;
 use grpcio::{Environment, ServerBuilder};
