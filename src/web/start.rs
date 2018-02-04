@@ -4,10 +4,16 @@ use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
 use rocket;
 use r2d2;
+use rocket_contrib::Template;
 
 #[get("/")]
-fn index() -> String {
-    "oh, hi mark".to_string()
+fn index() -> Template {
+    Template::render("index", json!({}))
+}
+
+#[get("/t/new")]
+fn t_new() -> Template {
+    Template::render("t/new", json!({}))
 }
 
 pub fn start() -> rocket::Rocket {
@@ -19,6 +25,6 @@ pub fn start() -> rocket::Rocket {
 
     rocket::ignite()
         .mount("/", routes![index])
-        // .attach(Template::fairing())
+        .attach(Template::fairing())
         .manage(pool)
 }

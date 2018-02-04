@@ -17,6 +17,9 @@ serde = "1.0"
 serde_derive = "1.0"
 r2d2 = "*"
 uuid = { version = "*", features = ["v4"] }
+rocket_contrib = { version = "0.3.6", features = ["handlebars_templates"] }
+handlebars = "0.30.1"
+serde_json = "1.0.9"
 
 [dependencies.diesel]
 version = "1.1"
