@@ -4,33 +4,22 @@ use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
 use rocket;
 use r2d2;
-// use rocket_contrib::Template;
 use askama::Template;
-
-// #[get("/")]
-// fn index() -> Template {
-//     Template::render("index", json!({}))
-// }
-
-// #[get("/t/new")]
-// fn t_new() -> Template {
-//     Template::render("t/new", json!({}))
-// }
 
 #[derive(Template)]
 #[template(path = "base.html")]
 struct Base;
 
 #[derive(Template)]
-#[template(path = "askama.html")]
-struct HelloAskama<'a> {
+#[template(path = "index.html")]
+struct Index<'a> {
     name: &'a str,
     _parent: Base,
 }
 
 #[get("/")]
-fn index() -> HelloAskama<'static> {
-    HelloAskama { name: "meow", _parent: Base }
+fn index() -> Index<'static> {
+    Index { name: "meow", _parent: Base }
 }
 
 pub fn start() -> rocket::Rocket {
