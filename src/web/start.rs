@@ -4,16 +4,28 @@ use diesel::pg::PgConnection;
 use diesel::r2d2::ConnectionManager;
 use rocket;
 use r2d2;
-use rocket_contrib::Template;
+// use rocket_contrib::Template;
+use askama::Template;
 
-#[get("/")]
-fn index() -> Template {
-    Template::render("index", json!({}))
+// #[get("/")]
+// fn index() -> Template {
+//     Template::render("index", json!({}))
+// }
+
+// #[get("/t/new")]
+// fn t_new() -> Template {
+//     Template::render("t/new", json!({}))
+// }
+
+#[derive(Template)]
+#[template(path = "askama.html")]
+struct HelloAskama<'a> {
+    name: &'a str,
 }
 
-#[get("/t/new")]
-fn t_new() -> Template {
-    Template::render("t/new", json!({}))
+#[get("/hello-askama")]
+fn hello_askama() -> HelloAskama<'static> {
+    HelloAskama { name: "meow"}
 }
 
 pub fn start() -> rocket::Rocket {
@@ -24,7 +36,6 @@ pub fn start() -> rocket::Rocket {
         r2d2::Pool::new(pool_manager).expect("Failed to create a database connection pool");
 
     rocket::ignite()
-        .mount("/", routes![index])
-        .attach(Template::fairing())
+        .mount("/", routes![hello_askama])
         .manage(pool)
 }
