@@ -18,14 +18,19 @@ use askama::Template;
 // }
 
 #[derive(Template)]
+#[template(path = "base.html")]
+struct Base;
+
+#[derive(Template)]
 #[template(path = "askama.html")]
 struct HelloAskama<'a> {
     name: &'a str,
+    _parent: Base,
 }
 
 #[get("/")]
 fn index() -> HelloAskama<'static> {
-    HelloAskama { name: "meow"}
+    HelloAskama { name: "meow", _parent: Base }
 }
 
 pub fn start() -> rocket::Rocket {
