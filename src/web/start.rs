@@ -5,6 +5,19 @@ use diesel::r2d2::ConnectionManager;
 use rocket;
 use r2d2;
 use askama::Template;
+use rocket_contrib::Json;
+
+struct ValidationFailure<T> {
+    error: String,
+    input: T,
+}
+
+type ValidationResult<T> = Result<Json<T>, ValidationFailure<T>>;
+
+#[post("/t")]
+fn t_create(form: Json<TextNew>) -> ValidationResult<TextNew> {
+    unimplemented!();
+}
 
 #[derive(Template)]
 #[template(path = "base.html")]
@@ -70,6 +83,16 @@ mod tests {
         let req = client.get("/t/new");
         let mut res = req.dispatch();
         assert_eq!(res.status(), Status::Ok);;
+        let body_string = res.body_string().unwrap();
+        assert!(body_string.contains("<form"), body_string);
+    }
+
+    #[test]
+    fn t_create_works() {
+        let client = Client::new(start()).unwrap();
+        let req = client.post("/t", json!({}));
+        let mut res = req.dispatch();
+        assert_eq!(res.status(), Status::Ok);
         let body_string = res.body_string().unwrap();
         assert!(body_string.contains("<form"), body_string);
     }
