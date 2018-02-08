@@ -23,8 +23,8 @@ struct HelloAskama<'a> {
     name: &'a str,
 }
 
-#[get("/hello-askama")]
-fn hello_askama() -> HelloAskama<'static> {
+#[get("/")]
+fn index() -> HelloAskama<'static> {
     HelloAskama { name: "meow"}
 }
 
@@ -36,6 +36,23 @@ pub fn start() -> rocket::Rocket {
         r2d2::Pool::new(pool_manager).expect("Failed to create a database connection pool");
 
     rocket::ignite()
-        .mount("/", routes![hello_askama])
+        .mount("/", routes![index])
         .manage(pool)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rocket::local::*;
+    use rocket::http::Status;
+
+    #[test]
+    fn index_works() {
+        let client = Client::new(start()).unwrap();
+        let req = client.get("/");
+        let mut res = req.dispatch();
+        assert_eq!(res.status(), Status::Ok);;
+        let body_string = res.body_string().unwrap();
+        assert!(body_string.contains("meow"), body_string);
+    }
 }
