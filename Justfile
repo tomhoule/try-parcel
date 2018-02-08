@@ -28,3 +28,6 @@ test:
     diesel database reset
   YACCHAUYO_DATABASE_URL="postgres://postgres@localhost:5432/yacchauyo_test" \
     cargo test
+
+watch:
+  watchexec --clear --exts html,rs cargo run
