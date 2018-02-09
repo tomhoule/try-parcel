@@ -87,7 +87,7 @@ mod tests {
     }
 
     #[test]
-    fn t_create_works() {
+    fn t_create_success_case() {
         use serde_json::{from_str, to_vec};
         use rocket::http::ContentType;
 
@@ -106,5 +106,25 @@ mod tests {
         assert_eq!(res.status(), Status::Ok);
         let body_string = res.body_string().unwrap();
         assert!(from_str::<Text>(&body_string).is_ok());
+    }
+
+    #[test]
+    fn t_create_failure_case() {
+        use serde_json::{from_str, to_vec};
+        use rocket::http::ContentType;
+
+        let client = Client::new(start()).unwrap();
+        let mut req = client.post("/t");
+        req.add_header("application/json".parse::<ContentType>().unwrap());
+        req.set_body(
+            to_vec(&json!({
+            "title": "meow",
+            "slug": 33,
+            "authors": "lalala",
+            "description": "",
+        })).unwrap(),
+        );
+        let res = req.dispatch();
+        assert_eq!(res.status(), Status::BadRequest);
     }
 }
