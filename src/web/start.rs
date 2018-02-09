@@ -94,14 +94,13 @@ mod tests {
         let client = Client::new(start()).unwrap();
         let mut req = client.post("/t");
         req.add_header("application/json".parse::<ContentType>().unwrap());
-        req.set_body(
-            to_vec(&json!({
+        let payload = json!({
             "title": "meow",
             "slug": "chu",
             "authors": "lalala",
             "description": "",
-        })).unwrap(),
-        );
+        });
+        req.set_body(to_vec(&payload).unwrap());
         let mut res = req.dispatch();
         assert_eq!(res.status(), Status::Ok);
         let body_string = res.body_string().unwrap();
@@ -110,20 +109,19 @@ mod tests {
 
     #[test]
     fn t_create_failure_case() {
-        use serde_json::{from_str, to_vec};
+        use serde_json::to_vec;
         use rocket::http::ContentType;
 
         let client = Client::new(start()).unwrap();
         let mut req = client.post("/t");
         req.add_header("application/json".parse::<ContentType>().unwrap());
-        req.set_body(
-            to_vec(&json!({
+        let payload = json!({
             "title": "meow",
             "slug": 33,
             "authors": "lalala",
             "description": "",
-        })).unwrap(),
-        );
+        });
+        req.set_body(to_vec(&payload).unwrap());
         let res = req.dispatch();
         assert_eq!(res.status(), Status::BadRequest);
     }
