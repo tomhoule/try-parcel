@@ -1,4 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>O, hi {{ name }}</h1>
+  <ul>
+    {% for t in texts %}
+      <li>
+        <a href='/t/{{t.id}}'>{{ t.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

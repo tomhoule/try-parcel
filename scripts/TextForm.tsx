@@ -23,14 +23,16 @@ export default class TextForm extends React.Component<{}, State> {
     description: '',
   }
 
-  submit = () => {
-    fetch('/t', {
+  submit = async () => {
+    const response = await fetch('/t', {
       method: 'post',
       body: JSON.stringify(this.state),
       headers: {
         'Content-Type': 'application/json',
       },
     })
+    const body = await response.json()
+    window.location.replace(`/t/${body.id}`)
   }
 
   render() {

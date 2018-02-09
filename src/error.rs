@@ -34,6 +34,12 @@ impl From<diesel::result::Error> for Error {
     }
 }
 
+impl From<::uuid::ParseError> for Error {
+    fn from(_err: ::uuid::ParseError) -> Error {
+        Error::NotFound
+    }
+}
+
 impl Error {
     pub fn as_grpc(&self) -> RpcStatus {
         use self::Error::*;

@@ -1,6 +1,6 @@
 use config;
 use configure::Configure;
-use diesel::pg::PgConnection;
+use diesel::prelude::*;
 use diesel::r2d2::ConnectionManager;
 use rocket;
 use r2d2;
@@ -28,15 +28,37 @@ struct Base;
 #[template(path = "index.html")]
 struct Index<'a> {
     name: &'a str,
+    texts: Vec<Text>,
     _parent: Base,
 }
 
 #[get("/")]
-fn index() -> Index<'static> {
-    Index {
+fn index(pool: DbPool) -> Result<Index<'static>, Error> {
+    let conn: &PgConnection = &*pool.inner().get()?;
+    Ok(Index {
         name: "meow",
+        texts: Text::index(conn)?,
         _parent: Base,
-    }
+    })
+}
+
+#[derive(Template)]
+#[template(path = "t/show.html")]
+struct TextShow {
+    text: Text,
+    _parent: Base,
+}
+
+#[get("/t/<path_id>")]
+fn t_show(pool: DbPool, path_id: String) -> Result<TextShow, Error> {
+    use db_schema::texts::dsl::*;
+    let conn: &PgConnection = &*pool.inner().get()?;
+    Ok(TextShow {
+        text: texts
+            .find(&path_id.parse::<::uuid::Uuid>()?)
+            .first(conn)?,
+        _parent: Base,
+    })
 }
 
 #[derive(Template)]
@@ -62,7 +84,7 @@ pub fn start() -> rocket::Rocket {
     let pool: r2d2::Pool<ConnectionManager<PgConnection>> =
         r2d2::Pool::new(pool_manager).expect("Failed to create a database connection pool");
 
-    let routes = routes![index, t_new, t_create, static_files];
+    let routes = routes![index, t_new, t_create, static_files, t_show];
 
     rocket::ignite().mount("/", routes).manage(pool)
 }
@@ -90,7 +112,7 @@ mod tests {
         let mut res = req.dispatch();
         assert_eq!(res.status(), Status::Ok);;
         let body_string = res.body_string().unwrap();
-        assert!(body_string.contains("<form"), body_string);
+        assert!(body_string.contains("data-text-new-form"), body_string);
     }
 
     #[test]
@@ -131,5 +153,41 @@ mod tests {
         req.set_body(to_vec(&payload).unwrap());
         let res = req.dispatch();
         assert_eq!(res.status(), Status::BadRequest);
+    }
+
+    fn db_conn() -> PgConnection {
+        PgConnection::establish(&::std::env::var("YACCHAUYO_DATABASE_URL").expect("YACCHAUYO_DATABASE_URL is defined")).unwrap()
+    }
+
+    #[test]
+    fn t_show_works() {
+        let conn = db_conn();
+        let text = NewText {
+            title: "yacchauyo_test_0000".to_string(),
+            authors: "meh".to_string(),
+            description: "".to_string(),
+            slug: "ahah".to_string(),
+        };
+        let text = text.save(&conn).unwrap();
+        let client = Client::new(start()).unwrap();
+        let req = client.get(format!("/t/{}", text.id));
+        let res = req.dispatch();
+        assert_eq!(res.status(), Status::Ok);
+    }
+
+    #[test]
+    fn t_show_with_bad_id() {
+        let client = Client::new(start()).unwrap();
+        let req = client.get("/t/a2223e80-f14d-4346-ab5");
+        let res = req.dispatch();
+        assert_eq!(res.status(), Status::NotFound);
+    }
+
+    #[test]
+    fn t_show_with_inexistent_id() {
+        let client = Client::new(start()).unwrap();
+        let req = client.get("/t/a2223e80-f14d-4346-ab4d-9da7a042bf45");
+        let res = req.dispatch();
+        assert_eq!(res.status(), Status::NotFound);
     }
 }
