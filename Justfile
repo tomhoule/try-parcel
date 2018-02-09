@@ -30,4 +30,4 @@ test:
     cargo test
 
 watch:
-  watchexec --clear --exts html,rs cargo run
+  watchexec --restart --clear --exts html,rs cargo run
