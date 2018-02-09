@@ -15,7 +15,7 @@ interface NewText {
   description: string
 }
 
-export default class TextForm extends React.Component<{}, State> {
+export default class TextForm extends React.Component<TopLevel, State> {
   state = {
     title: '',
     slug: '',
