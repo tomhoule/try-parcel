@@ -5,7 +5,7 @@ use std::convert::From;
 use diesel::prelude::*;
 use db_schema::*;
 
-#[derive(Identifiable, Queryable, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Identifiable, Queryable, Debug, PartialEq)]
 pub struct Text {
     pub id: Uuid,
     pub title: String,
@@ -43,7 +43,7 @@ impl From<Text> for proto::Text {
     }
 }
 
-#[derive(Insertable, PartialEq, Debug)]
+#[derive(Deserialize, Serialize, Insertable, PartialEq, Debug)]
 #[table_name = "texts"]
 pub struct NewText {
     pub title: String,
