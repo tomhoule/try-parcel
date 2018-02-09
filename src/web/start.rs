@@ -6,17 +6,16 @@ use rocket;
 use r2d2;
 use askama::Template;
 use rocket_contrib::Json;
+use models::texts::{NewText, Text};
+use rocket::State;
+use error::*;
 
-struct ValidationFailure<T> {
-    error: String,
-    input: T,
-}
+type DbPool<'a> = State<'a, r2d2::Pool<ConnectionManager<PgConnection>>>;
 
-type ValidationResult<T> = Result<Json<T>, ValidationFailure<T>>;
-
-#[post("/t")]
-fn t_create(form: Json<TextNew>) -> ValidationResult<TextNew> {
-    unimplemented!();
+#[post("/t", data = "<form>")]
+fn t_create(pool: DbPool, form: Json<NewText>) -> Result<Json<Text>, Error> {
+    let conn: &PgConnection = &*pool.inner().get()?;
+    Ok(Json(form.save(conn)?))
 }
 
 #[derive(Template)]
@@ -32,12 +31,17 @@ struct Index<'a> {
 
 #[get("/")]
 fn index() -> Index<'static> {
-    Index { name: "meow", _parent: Base }
+    Index {
+        name: "meow",
+        _parent: Base,
+    }
 }
 
 #[derive(Template)]
 #[template(path = "t/new.html")]
-struct TextNew { _parent: Base }
+struct TextNew {
+    _parent: Base,
+}
 
 #[get("/t/new")]
 fn t_new() -> TextNew {
@@ -51,14 +55,9 @@ pub fn start() -> rocket::Rocket {
     let pool: r2d2::Pool<ConnectionManager<PgConnection>> =
         r2d2::Pool::new(pool_manager).expect("Failed to create a database connection pool");
 
-    let routes = routes![
-        index,
-        t_new,
-    ];
+    let routes = routes![index, t_new, t_create];
 
-    rocket::ignite()
-        .mount("/", routes)
-        .manage(pool)
+    rocket::ignite().mount("/", routes).manage(pool)
 }
 
 #[cfg(test)]
@@ -89,11 +88,23 @@ mod tests {
 
     #[test]
     fn t_create_works() {
+        use serde_json::{from_str, to_vec};
+        use rocket::http::ContentType;
+
         let client = Client::new(start()).unwrap();
-        let req = client.post("/t", json!({}));
+        let mut req = client.post("/t");
+        req.add_header("application/json".parse::<ContentType>().unwrap());
+        req.set_body(
+            to_vec(&json!({
+            "title": "meow",
+            "slug": "chu",
+            "authors": "lalala",
+            "description": "",
+        })).unwrap(),
+        );
         let mut res = req.dispatch();
         assert_eq!(res.status(), Status::Ok);
         let body_string = res.body_string().unwrap();
-        assert!(body_string.contains("<form"), body_string);
+        assert!(from_str::<Text>(&body_string).is_ok());
     }
 }
