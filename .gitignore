@@ -1,7 +1,11 @@
+.cache
+**/*.rs.bk
 /.env
-/target/
+/dist
 /frontend/.cache
 /frontend/dist
 /frontend/node_modules
-**/*.rs.bk
+/node_modules
+/static
+/target/
 yarn-error.log

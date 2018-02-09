@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+      "allowJs": false,
+      "jsx": "react",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "noImplicitAny": true,
+      "noImplicitReturns": true,
+      "sourceMap": true,
+      "strictNullChecks": true,
+      "strict": true,
+      "target": "es2017"
+  }
+}

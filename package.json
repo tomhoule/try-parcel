@@ -1,0 +1,20 @@
+{
+  "name": "yacchauyo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:tomhoule/try-parcel.git",
+  "author": "Tom Houlé <tom@tomhoule.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "parcel build -d static scripts/index.tsx",
+    "watch": "parcel watch -d static scripts/index.tsx"
+  },
+  "dependencies": {
+    "@types/react-dom": "^16.0.3",
+    "parcel-bundler": "^1.5.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.1"
+  }
+}

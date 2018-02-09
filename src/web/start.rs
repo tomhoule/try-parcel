@@ -9,6 +9,8 @@ use rocket_contrib::Json;
 use models::texts::{NewText, Text};
 use rocket::State;
 use error::*;
+use std::path::{Path, PathBuf};
+use rocket::response::NamedFile;
 
 type DbPool<'a> = State<'a, r2d2::Pool<ConnectionManager<PgConnection>>>;
 
@@ -48,6 +50,11 @@ fn t_new() -> TextNew {
     TextNew { _parent: Base }
 }
 
+#[get("/static/<file..>")]
+fn static_files(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("static/").join(file)).ok()
+}
+
 pub fn start() -> rocket::Rocket {
     use_default_config!();
     let config = config::Config::generate().unwrap();
@@ -55,7 +62,7 @@ pub fn start() -> rocket::Rocket {
     let pool: r2d2::Pool<ConnectionManager<PgConnection>> =
         r2d2::Pool::new(pool_manager).expect("Failed to create a database connection pool");
 
-    let routes = routes![index, t_new, t_create];
+    let routes = routes![index, t_new, t_create, static_files];
 
     rocket::ignite().mount("/", routes).manage(pool)
 }
