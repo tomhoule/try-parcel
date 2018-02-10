@@ -6,11 +6,14 @@ use rocket::response::Responder;
 use rocket::request::Request;
 use rocket::response::Response;
 use rocket::http::Status;
+use serde_json::Error as JsonError;
 
 #[derive(Debug, Fail)]
 pub enum Error {
     #[fail(display = "Database cannot be reached")]
     DatabaseUnreachable,
+    #[fail(display = "Internal server error")]
+    Internal,
     #[fail(display = "Invalid input")]
     InvalidInput,
     #[fail(display = "Not found")]
@@ -34,6 +37,12 @@ impl From<diesel::result::Error> for Error {
     }
 }
 
+impl From<JsonError> for Error {
+    fn from(_err: JsonError) -> Error {
+        Error::Internal
+    }
+}
+
 impl From<::uuid::ParseError> for Error {
     fn from(_err: ::uuid::ParseError) -> Error {
         Error::NotFound
@@ -51,7 +60,7 @@ impl Error {
                 RpcStatus::new(RpcStatusCode::InvalidArgument, Some(format!("{}", &self)))
             }
             NotFound => RpcStatus::new(RpcStatusCode::NotFound, None),
-            Db { inner: _ } => RpcStatus::new(RpcStatusCode::Internal, Some(format!("{}", &self))),
+            Db { inner: _ } | Internal => RpcStatus::new(RpcStatusCode::Internal, Some(format!("{}", &self))),
         }
     }
 }
@@ -64,7 +73,7 @@ impl<'r> Responder<'r> for Error {
             InvalidInput => Err(Status::UnprocessableEntity),
             DatabaseUnreachable => Err(Status::ServiceUnavailable),
             NotFound => Err(Status::NotFound),
-            Db { inner: _ } => Err(Status::InternalServerError),
+            Db { inner: _ } | Internal => Err(Status::InternalServerError),
         }
     }
 }

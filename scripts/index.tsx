@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import ConfirmModal from './ConfirmModal'
 import TextForm from './TextForm'
+import SchemaEditor from './SchemaEditor'
 
 declare global {
   interface TopLevel {
@@ -18,3 +19,4 @@ function attach(selector: string, Component: React.ComponentClass<TopLevel>): vo
 
 attach('[data-text-new-form]', TextForm)
 attach('[data-confirm]', ConfirmModal)
+attach('[data-schema-editor]', SchemaEditor)

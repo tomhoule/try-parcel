@@ -42,7 +42,7 @@ export default class ConfirmModal extends React.Component<TopLevel, State> {
     } else {
       return (
         <button onClick={() => this.setState({ modalOpen: true })}>
-          {this.props.data['button-text'] || 'no button text'}
+          {this.props.data['buttonText'] || 'no button text'}
         </button>)
     }
   }
