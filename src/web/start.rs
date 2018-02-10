@@ -42,7 +42,15 @@ pub fn start() -> rocket::Rocket {
     let pool: r2d2::Pool<ConnectionManager<PgConnection>> =
         r2d2::Pool::new(pool_manager).expect("Failed to create a database connection pool");
 
-    let routes = routes![index, t_new, t_create, static_files, t_show, t_delete];
+    let routes = routes![
+        index,
+        static_files,
+        t_create,
+        t_delete,
+        t_edit,
+        t_new,
+        t_show,
+    ];
 
     rocket::ignite().mount("/", routes).manage(pool)
 }

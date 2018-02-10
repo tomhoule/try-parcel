@@ -2,6 +2,7 @@ use askama::Template;
 use diesel::prelude::*;
 use error::Error;
 use models::schemas::Schema;
+use models::fragments::Fragment;
 use models::texts::*;
 use rocket_contrib::Json;
 use rocket::response::Redirect;
@@ -9,10 +10,18 @@ use uuid::Uuid;
 use web::shared::*;
 
 #[derive(Template)]
+#[template(path = "t/edit.html")]
+pub struct TextEdit {
+    text: Text,
+    schema: Schema,
+    _parent: Base,
+}
+
+#[derive(Template)]
 #[template(path = "t/show.html")]
 pub struct TextShow {
     text: Text,
-    schema: Schema,
+    fragments: Vec<Fragment>,
     _parent: Base,
 }
 
@@ -25,12 +34,34 @@ pub fn t_show(pool: DbPool, path_id: String) -> Result<TextShow, Error> {
         .find(path_id.parse::<::uuid::Uuid>()?)
         .left_join(schemas::table);
     let (text, schema) = join.first::<(Text, Option<Schema>)>(conn)?;
+    // let schema = if let Some(schema) = schema {
+    //     schema
+    // } else {
+    //     Schema::for_text(&conn, text.id)?
+    // };
+
+    Ok(TextShow {
+        text,
+        fragments: Vec::new(),
+        _parent: Base,
+    })
+}
+
+#[get("/t/<path_id>/edit")]
+pub fn t_edit(pool: DbPool, path_id: String) -> Result<TextEdit, Error> {
+    use db_schema::texts::dsl::*;
+    use db_schema::schemas;
+    let conn: &PgConnection = &*pool.inner().get()?;
+    let join = texts
+        .find(path_id.parse::<::uuid::Uuid>()?)
+        .left_join(schemas::table);
+    let (text, schema) = join.first::<(Text, Option<Schema>)>(conn)?;
     let schema = if let Some(schema) = schema {
         schema
     } else {
         Schema::for_text(&conn, text.id)?
     };
-    Ok(TextShow {
+    Ok(TextEdit {
         text,
         schema,
         _parent: Base,
@@ -127,13 +158,45 @@ mod tests {
     }
 
     #[test]
-    fn t_show_works() {
+    fn t_edit_works() {
         let conn = db_conn();
         let text = NewText {
             title: "yacchauyo_test_0000".to_string(),
             authors: "meh".to_string(),
             description: "".to_string(),
             slug: "ahah".to_string(),
+        };
+        let text = text.save(&conn).expect("saved text");
+        let client = Client::new(start()).expect("started client");
+        let req = client.get(format!("/t/{}/edit", text.id));
+        let res = req.dispatch();
+        assert_eq!(res.status(), Status::Ok);
+    }
+
+    #[test]
+    fn t_edit_with_bad_id() {
+        let client = Client::new(start()).unwrap();
+        let req = client.get("/t/a2223e80-f14d-4346-ab5/edit");
+        let res = req.dispatch();
+        assert_eq!(res.status(), Status::NotFound);
+    }
+
+    #[test]
+    fn t_edit_with_inexistent_id() {
+        let client = Client::new(start()).unwrap();
+        let req = client.get("/t/a2223e80-f14d-4346-ab4d-9da7a042bf45/edit");
+        let res = req.dispatch();
+        assert_eq!(res.status(), Status::NotFound);
+    }
+
+    #[test]
+    fn t_show_works() {
+        let conn = db_conn();
+        let text = NewText {
+            title: "yacchauyo_test_0000".to_string(),
+            authors: "meh".to_string(),
+            description: "".to_string(),
+            slug: "slug_00008".to_string(),
         };
         let text = text.save(&conn).expect("saved text");
         let client = Client::new(start()).expect("started client");

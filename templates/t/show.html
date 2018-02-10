@@ -5,7 +5,15 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{{text.title}}</h1>
-  <div data-schema-editor data-paths='{% for p in schema.paths %}{{p}},{% endfor %}'></div>
-  <div data-confirm data-button-text='Delete this text' data-action='/t/{{text.id}}/delete'></div>
+  {% for fragment in fragments %}
+    ---
+    <section>
+      <div>
+        {fragment.path}
+      </div>
+      <div data-fragment-editor></div>
+      <div>
+      </div>
+    </section>
+  {% endfor %}
 {% endblock %}
