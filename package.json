@@ -7,13 +7,36 @@
   "license": "MIT",
   "scripts": {
     "build": "parcel build -d static scripts/index.tsx",
+    "test": "jest",
     "watch": "parcel watch -d static scripts/index.tsx"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "scripts/.*(test|spec)\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "setupTestFrameworkScriptFile": "./scripts/setupTests.ts"
+  },
   "dependencies": {
+    "@types/enzyme": "^3.1.8",
+    "@types/enzyme-adapter-react-16": "^1.0.1",
+    "@types/jest": "^22.1.2",
     "@types/react-dom": "^16.0.3",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest": "^22.2.2",
     "parcel-bundler": "^1.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "ts-jest": "^22.0.3",
     "tslint": "^5.9.1",
     "typescript": "^2.7.1"
   }
