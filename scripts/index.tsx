@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import ConfirmModal from './ConfirmModal'
 import TextForm from './TextForm'
 
 declare global {
@@ -16,3 +17,4 @@ function attach(selector: string, Component: React.ComponentClass<TopLevel>): vo
 }
 
 attach('[data-text-new-form]', TextForm)
+attach('[data-confirm]', ConfirmModal)

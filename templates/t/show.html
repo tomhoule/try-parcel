@@ -1,4 +1,15 @@
 {% extends "base.html" %}
+
+{% block title %}
+  {{text.title}}
+{% endblock %}
+
 {% block content %}
   <h1>{{text.title}}</h1>
+  <div>
+    {% for path in schema.paths %}
+      {{path}}
+    {% endfor %}
+  </div>
+  <div data-confirm data-action='/t/{{text.id}}/delete'></div>
 {% endblock %}

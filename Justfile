@@ -30,4 +30,9 @@ test:
     cargo test
 
 watch:
-  watchexec --restart --clear --exts html,rs cargo run
+  watchexec \
+    -s SIGKILL \
+    --restart \
+    --clear \
+    --exts html,rs \
+    cargo run
