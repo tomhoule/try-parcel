@@ -8,6 +8,7 @@ use protobuf::RepeatedField;
 use db_schema::*;
 use models::texts::Text;
 
+/// Schemas are used for the ordering and structuring of fragments inside a text.
 #[derive(Identifiable, Associations, Queryable, Debug, PartialEq)]
 #[belongs_to(Text, foreign_key = "text_id")]
 pub struct Schema {

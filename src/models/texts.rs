@@ -5,6 +5,7 @@ use std::convert::From;
 use diesel::prelude::*;
 use db_schema::*;
 
+/// Texts are the basic anchor to which we attach schemas and fragments.
 #[derive(Serialize, Deserialize, Identifiable, Queryable, Debug, PartialEq)]
 pub struct Text {
     pub id: Uuid,
