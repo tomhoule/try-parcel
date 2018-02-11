@@ -35,6 +35,11 @@ fn static_files(file: PathBuf) -> Option<NamedFile> {
     NamedFile::open(Path::new("static/").join(file)).ok()
 }
 
+#[get("/docs/<file..>")]
+fn docs(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("target/doc/").join(file)).ok()
+}
+
 pub fn start() -> rocket::Rocket {
     use_default_config!();
     let config = config::Config::generate().unwrap();
@@ -45,6 +50,7 @@ pub fn start() -> rocket::Rocket {
     let routes = routes![
         index,
         static_files,
+        docs,
         t_create,
         t_delete,
         t_edit,
