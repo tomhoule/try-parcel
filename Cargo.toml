@@ -20,6 +20,7 @@ uuid = { version = "*", features = ["v4", "serde"] }
 serde_json = "1.0.9"
 askama = { git = "https://github.com/djc/askama", features = ["with-rocket"] }
 rocket_contrib = "0.3"
+structopt = "0.2.2"
 
 [dependencies.diesel]
 version = "1.1"
