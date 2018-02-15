@@ -17,7 +17,7 @@ export class Form extends React.Component<Props> {
     return (
       <form>
         {this.props.children &&
-          React.cloneElement(this.props.children as any, (props) => ({
+          React.cloneElement(this.props.children as any, (props: any): any => ({
             errors: props.name ? errors[name] : undefined,
             onChange: props.name ? onChange : undefined,
         }))}

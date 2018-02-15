@@ -19,7 +19,7 @@ export class TextInput extends React.Component<TextInputProps> {
         <input
           name={name}
           onChange={onChange}
-          value={value}
+          value={value || ''}
         />
       </>
     )
