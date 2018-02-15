@@ -100,3 +100,31 @@ export function rpcCall<
     request,
   }))
 }
+
+type CancelFunction = () => void
+
+// tslint:disable-next-line:max-classes-per-file
+class Scheduler {
+  dispatch: Dispatch<any>
+  exclusive: Record<string, boolean> = {}
+  takeLatest: Record<string, CancelFunction> = {}
+
+  constructor(dispatch: Dispatch<any>) {
+    this.dispatch = dispatch
+  }
+
+  scheduleExclusive<T extends () => Promise<any>>(key: string, fn: T) {
+    if (!this.exclusive[key]) {
+      fn().then(() => (this.exclusive[key] = false))
+    }
+  }
+
+  scheduleTakeLatest<T extends () => Promise<any>>(key: string, fn: T, cancel: CancelFunction) {
+    if (this.takeLatest[key]) {
+      // cancel
+      this.takeLatest[key]()
+    }
+    this.takeLatest[key] = cancel
+    fn()
+  }
+}

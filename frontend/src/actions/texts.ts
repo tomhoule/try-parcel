@@ -6,9 +6,9 @@ import * as backend from '../rpc/yacchauyo_pb_service'
 const factory = actionCreatorFactory('texts')
 
 export const texts = {
-  create: factory.async<proto.Text, proto.Text.AsObject, {}>('CREATE'),
+  create: factory.async<proto.Text, proto.Text.AsObject, RpcFailure>('CREATE'),
   fetchIndex: factory.async<proto.TextsQuery, proto.Texts.AsObject, RpcFailure>('FETCH_INDEX'),
-  patch: factory.async<proto.Text, proto.Text.AsObject, {}>('PATCH'),
+  patch: factory.async<proto.Text, proto.Text.AsObject, RpcFailure>('PATCH'),
 }
 
 export const fetchIndexTask = buckle(
