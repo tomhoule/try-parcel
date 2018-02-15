@@ -50,7 +50,7 @@
     "@types/react-redux": "^5.0.14",
     "axios": "^0.17.1",
     "google-protobuf": "^3.5.0",
-    "grpc-web-client": "^0.3.1",
+    "grpc-web-client": "^0.5.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
