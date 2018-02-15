@@ -2,12 +2,12 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Route, RouteProps, Switch } from 'react-router'
 import { Link } from 'react-router-dom'
-import { texts } from '../actions/texts'
+import { texts, fetchIndexTask } from '../actions/texts'
 import * as proto from '../rpc/yacchauyo_pb'
 import { CreateText } from './CreateText'
 
 interface DispatchProps {
-  fetchIndex: typeof texts.fetchIndex.started
+  fetchIndex: typeof fetchIndexTask
 }
 
 interface StateProps {
@@ -44,6 +44,6 @@ export default connect<StateProps, DispatchProps, OwnProps, AppState>(
     texts: state.texts.index.textsList || [],
   }),
   {
-    fetchIndex: texts.fetchIndex.started,
+    fetchIndex: fetchIndexTask,
   },
 )(Texts)

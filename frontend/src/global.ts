@@ -1,3 +1,4 @@
+import { Code } from 'grpc-web-client/dist/Code'
 import * as proto from './rpc/yacchauyo_pb'
 
 declare global {
@@ -7,6 +8,11 @@ declare global {
 
   interface AppState {
     texts: TextsState
+  }
+
+  interface RpcFailure {
+    status: Code
+    statusMessage: string
   }
 
   namespace ycy {
