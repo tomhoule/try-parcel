@@ -1,14 +1,19 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import Form from './Form'
-import { createTask } from '../actions/texts'
+import { createTask, patchTask } from '../actions/texts'
 import * as proto from '../rpc/yacchauyo_pb'
 
 interface DispatchProps {
   createText: typeof createTask
+  patch: typeof patchTask
 }
 
-type Props = DispatchProps
+interface OwnProps {
+  params: { textId?: string }
+}
+
+type Props = DispatchProps & OwnProps
 type State = Partial<proto.Text.AsObject>
 
 export class CreateText extends React.Component<Props, State> {
@@ -21,7 +26,12 @@ export class CreateText extends React.Component<Props, State> {
     payload.setSlug(this.state.slug || '')
     payload.setTitle(this.state.title || '')
 
-    this.props.createText(payload)
+    if (this.props.params.textId) {
+      payload.setId(this.props.params.textId)
+      this.props.patch(payload)
+    } else {
+      this.props.createText(payload)
+    }
   }
 
   render() {

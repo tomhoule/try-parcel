@@ -23,7 +23,13 @@ export const createTask = buckle(
   texts.create,
   async (action) => {
     const result = await rpcCall(backend.Yacchauyo.CreateText, action.payload)
-    // result.mapErr(err => {
-    // })
     return result.map(res => res.toObject())
   })
+
+export const patchTask = buckle(
+  texts.patch,
+  async (action) => {
+    const result = await rpcCall(backend.Yacchauyo.PatchText, action.payload)
+    return result.map(res => res.toObject())
+  },
+)
