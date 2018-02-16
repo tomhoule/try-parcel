@@ -1,26 +1,26 @@
 import * as React from 'react'
 
-interface MinimalEvent<N extends string> {
-  target: { name: N, value: string }
-}
-
-type OnChange = <N extends string>(event: MinimalEvent<N>) => void
-
 interface Props {
-  errors: any[]
-  onChange: OnChange
+  onChange: (change: Record<string, any>) => void
+  submit: () => void
 }
 
-export class Form extends React.Component<Props> {
+export default class Form extends React.Component<Props> {
+
+  onChange = (event: any): void => {
+    this.props.onChange({ [event.target.name]: event.target.value })
+  }
+
+  onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    this.props.submit()
+  }
+
   render() {
-    const { errors, onChange } = this.props
     return (
-      <form>
-        {this.props.children &&
-          React.cloneElement(this.props.children as any, (props: any): any => ({
-            errors: props.name ? errors[name] : undefined,
-            onChange: props.name ? onChange : undefined,
-        }))}
+      <form onChange={this.onChange} onSubmit={this.onSubmit}>
+        {this.props.children}
+        <button type='submit'>Save</button>
       </form>
     )
   }

@@ -2,6 +2,7 @@ import { actionCreatorFactory } from 'typescript-fsa'
 import * as proto from '../rpc/yacchauyo_pb'
 import { buckle, rpcCall } from '../prelude'
 import * as backend from '../rpc/yacchauyo_pb_service'
+import { Code } from 'grpc-web-client/dist/Code'
 
 const factory = actionCreatorFactory('texts')
 
@@ -15,5 +16,14 @@ export const fetchIndexTask = buckle(
   texts.fetchIndex,
   async (action) => {
     const result = await rpcCall(backend.Yacchauyo.TextsIndex, action.payload)
+    return result.map(res => res.toObject())
+  })
+
+export const createTask = buckle(
+  texts.create,
+  async (action) => {
+    const result = await rpcCall(backend.Yacchauyo.CreateText, action.payload)
+    // result.mapErr(err => {
+    // })
     return result.map(res => res.toObject())
   })

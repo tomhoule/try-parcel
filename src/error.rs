@@ -32,6 +32,10 @@ impl From<diesel::result::Error> for Error {
     fn from(err: diesel::result::Error) -> Error {
         match err {
             diesel::result::Error::NotFound => Error::NotFound,
+            diesel::result::Error::DatabaseError(
+                diesel::result::DatabaseErrorKind::UniqueViolation,
+                info,
+            ) => Error::InvalidInput,
             err => Error::Db { inner: err },
         }
     }

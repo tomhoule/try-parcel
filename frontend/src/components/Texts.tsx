@@ -4,7 +4,7 @@ import { Route, RouteProps, Switch } from 'react-router'
 import { Link } from 'react-router-dom'
 import { texts, fetchIndexTask } from '../actions/texts'
 import * as proto from '../rpc/yacchauyo_pb'
-import { CreateText } from './CreateText'
+import CreateText from './CreateText'
 
 interface DispatchProps {
   fetchIndex: typeof fetchIndexTask
