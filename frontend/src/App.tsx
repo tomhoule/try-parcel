@@ -4,6 +4,7 @@ import * as ReactRedux from 'react-redux'
 import { Route } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
 import Texts from './components/Texts'
+import EditText from './components/EditText'
 import { store } from './store'
 
 export class App extends React.Component<{}, {}> {
@@ -11,6 +12,7 @@ export class App extends React.Component<{}, {}> {
     return (
       <BrowserRouter>
         <Route path='/' component={Texts} />
+        <Route path='/t/:textId/edit' component={EditText} />
       </BrowserRouter>
     )
   }

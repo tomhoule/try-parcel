@@ -2,8 +2,15 @@ import { Code } from 'grpc-web-client/dist/Code'
 import * as proto from './rpc/yacchauyo_pb'
 
 declare global {
+
+  interface TextSingle {
+    schema: proto.Schema.AsObject
+    text: proto.Text.AsObject
+  }
+
   interface TextsState {
     index: proto.Texts.AsObject
+    single: TextSingle | null
   }
 
   interface AppState {

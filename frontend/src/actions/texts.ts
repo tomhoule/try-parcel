@@ -1,14 +1,16 @@
 import { actionCreatorFactory } from 'typescript-fsa'
 import * as proto from '../rpc/yacchauyo_pb'
-import { buckle, rpcCall } from '../prelude'
+import { buckle, rpcCall, Err, Ok } from '../prelude'
 import * as backend from '../rpc/yacchauyo_pb_service'
 import { Code } from 'grpc-web-client/dist/Code'
+import { push } from 'react-router-redux';
 
 const factory = actionCreatorFactory('texts')
 
 export const texts = {
   create: factory.async<proto.Text, proto.Text.AsObject, RpcFailure>('CREATE'),
   fetchIndex: factory.async<proto.TextsQuery, proto.Texts.AsObject, RpcFailure>('FETCH_INDEX'),
+  fetchSingle: factory.async<string, TextSingle, RpcFailure>('FETCH_SINGLE'),
   patch: factory.async<proto.Text, proto.Text.AsObject, RpcFailure>('PATCH'),
 }
 
@@ -31,5 +33,37 @@ export const patchTask = buckle(
   async (action) => {
     const result = await rpcCall(backend.Yacchauyo.PatchText, action.payload)
     return result.map(res => res.toObject())
+  },
+)
+
+export const fetchTask = buckle(
+  texts.fetchSingle,
+  async (action, getState, dispatch) => {
+    const query = new proto.TextsQuery()
+    query.setId(action.payload)
+    const results = await Promise.all([
+      rpcCall(backend.Yacchauyo.TextsIndex, query),
+      rpcCall(backend.Yacchauyo.TextSchema, query),
+    ])
+
+    const text = results[0]
+      .map(texts => texts.toObject().textsList[0])
+      .andThen<proto.Text.AsObject>(text => text
+        ? new Ok(text)
+        : new Err({
+            status: Code.NotFound,
+            statusMessage:  'not found'
+          })
+      ).mapErr(err => {
+        if (err.status == Code.NotFound) {
+          dispatch(push('/'))
+        }
+        return err
+      })
+
+    return text.andThen(text => results[1].map(schema => ({
+      schema: schema.toObject(),
+      text,
+    })))
   },
 )
