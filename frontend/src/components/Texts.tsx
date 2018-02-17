@@ -28,9 +28,9 @@ export class Texts extends React.Component<Props> {
       <div>
         <Link to='/texts/new'>New texts</Link>
         {this.props.texts.map(text =>
-          <div key={text.id}>
+          <Link to={`/t/${text.id}/edit`} key={text.id}>
             {text.title}
-          </div>)}
+          </Link>)}
         <Switch>
           <Route path='/texts/new' component={CreateText} />
         </Switch>

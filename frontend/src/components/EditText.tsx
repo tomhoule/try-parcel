@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
+import { RouteProps, RouteComponentProps } from 'react-router'
 import SchemaEditor from './SchemaEditor'
 import { Schema, Text } from '../rpc/yacchauyo_pb'
 import { patchSchemaTask } from '../actions/schemas'
@@ -14,15 +15,14 @@ interface DispatchProps {
   patchSchema: typeof patchSchemaTask
 }
 
-interface OwnProps {
-  params: { textId: string }
+interface OwnProps extends RouteComponentProps<{ textId: string }> {
 }
 
 type Props = StateProps & DispatchProps & OwnProps
 
 export class EditText extends React.Component<Props> {
   componentWillMount() {
-    this.props.fetchText(this.props.params.textId)
+    this.props.fetchText(this.props.match.params.textId)
   }
 
   render() {
@@ -44,6 +44,7 @@ export default connect<StateProps, DispatchProps, OwnProps, AppState>(
     text: state.texts.single,
   }),
   {
+    fetchText: fetchTask,
     patchSchema: patchSchemaTask,
   },
 )(EditText)

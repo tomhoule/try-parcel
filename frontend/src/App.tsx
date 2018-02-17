@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as ReactRedux from 'react-redux'
-import { Route } from 'react-router'
+import { Route, Switch } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
 import Texts from './components/Texts'
 import EditText from './components/EditText'
@@ -11,8 +11,10 @@ export class App extends React.Component<{}, {}> {
   render() {
     return (
       <BrowserRouter>
-        <Route path='/' component={Texts} />
-        <Route path='/t/:textId/edit' component={EditText} />
+        <Switch>
+          <Route path='/t/:textId/edit' component={EditText} />
+          <Route path='/' component={Texts} />
+        </Switch>
       </BrowserRouter>
     )
   }
