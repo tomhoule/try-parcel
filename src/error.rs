@@ -69,7 +69,9 @@ impl Error {
                 RpcStatus::new(RpcStatusCode::AlreadyExists, Some(format!("{}", &self)))
             }
             NotFound => RpcStatus::new(RpcStatusCode::NotFound, None),
-            Db { inner: _ } | Internal => RpcStatus::new(RpcStatusCode::Internal, Some(format!("{}", &self))),
+            Db { inner: _ } | Internal => {
+                RpcStatus::new(RpcStatusCode::Internal, Some(format!("{}", &self)))
+            }
         }
     }
 }
