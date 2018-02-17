@@ -5,8 +5,10 @@ use diesel::prelude::*;
 use configure::Configure;
 use rpc::yacchauyo::{Schema, Text, Texts, TextsQuery};
 use models;
+use models::texts::Text as TextModel;
 use error::Error;
 use utils::*;
+use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct Server {
@@ -21,11 +23,18 @@ impl Server {
         Server { pool }
     }
 
-    pub fn texts_index(&self, _req: TextsQuery) -> Result<Texts, Error> {
+    pub fn texts_index(&self, req: TextsQuery) -> Result<Texts, Error> {
+        use db_schema::texts::dsl::*;
         let conn = &*self.pool.get()?;
-        let texts = models::texts::Text::index(conn)?;
+        let id_param: Option<Uuid> = req.id.parse().ok();
+        let index: Vec<TextModel> = if let Some(id_param) = id_param {
+            texts.filter(id.eq(id_param)).load(conn)?
+        } else {
+            texts.load(conn)?
+        };
+
         let mut response = ::rpc::yacchauyo::Texts::new();
-        fill_repeated(&mut response.texts, texts);
+        fill_repeated(&mut response.texts, index);
         Ok(response)
     }
 
@@ -69,6 +78,24 @@ mod tests {
         setup();
         let req = TextsQuery::new();
         Server::new().texts_index(req).unwrap();
+    }
+
+    #[test]
+    fn texts_index_can_filter_by_id() {
+        let conn = db_setup();
+        let server = Server::new();
+        let mut req = TextsQuery::new();
+        let created = models::texts::NewText {
+            title: "我輩は猫である".to_string(),
+            authors: "なつめ漱石".to_string(),
+            slug: "wagahai-ha-neko-de-aru".to_string(),
+            description: "".to_string(),
+        }.save(&conn)
+            .unwrap();
+        req.id = created.id.to_string();
+        let res = server.texts_index(req).unwrap();
+        assert_eq!(res.texts.len(), 1);
+        assert_eq!(res.texts[0].id, created.id.to_string());
     }
 
     #[test]
