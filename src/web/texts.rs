@@ -33,7 +33,7 @@ pub fn t_show(pool: DbPool, path_id: String) -> Result<TextShow, Error> {
     let join = texts
         .find(path_id.parse::<::uuid::Uuid>()?)
         .left_join(schemas::table);
-    let (text, schema) = join.first::<(Text, Option<Schema>)>(conn)?;
+    let (text, _schema) = join.first::<(Text, Option<Schema>)>(conn)?;
     // let schema = if let Some(schema) = schema {
     //     schema
     // } else {

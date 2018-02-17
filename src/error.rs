@@ -18,6 +18,8 @@ pub enum Error {
     InvalidInput,
     #[fail(display = "Not found")]
     NotFound,
+    #[fail(display = "Resource already exists")]
+    AlreadyExists,
     #[fail(display = "Database error: {}", inner)]
     Db { inner: diesel::result::Error },
 }
@@ -34,8 +36,8 @@ impl From<diesel::result::Error> for Error {
             diesel::result::Error::NotFound => Error::NotFound,
             diesel::result::Error::DatabaseError(
                 diesel::result::DatabaseErrorKind::UniqueViolation,
-                info,
-            ) => Error::InvalidInput,
+                _info,
+            ) => Error::AlreadyExists,
             err => Error::Db { inner: err },
         }
     }
@@ -63,6 +65,9 @@ impl Error {
             InvalidInput => {
                 RpcStatus::new(RpcStatusCode::InvalidArgument, Some(format!("{}", &self)))
             }
+            AlreadyExists => {
+                RpcStatus::new(RpcStatusCode::AlreadyExists, Some(format!("{}", &self)))
+            }
             NotFound => RpcStatus::new(RpcStatusCode::NotFound, None),
             Db { inner: _ } | Internal => RpcStatus::new(RpcStatusCode::Internal, Some(format!("{}", &self))),
         }
@@ -74,7 +79,7 @@ impl<'r> Responder<'r> for Error {
         use self::Error::*;
 
         match self {
-            InvalidInput => Err(Status::UnprocessableEntity),
+            InvalidInput | AlreadyExists => Err(Status::UnprocessableEntity),
             DatabaseUnreachable => Err(Status::ServiceUnavailable),
             NotFound => Err(Status::NotFound),
             Db { inner: _ } | Internal => Err(Status::InternalServerError),

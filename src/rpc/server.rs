@@ -101,13 +101,7 @@ mod tests {
 
         server.create_text(proto.clone()).unwrap();
         match server.create_text(proto) {
-            Err(Error::Db {
-                inner:
-                    ::diesel::result::Error::DatabaseError(
-                        ::diesel::result::DatabaseErrorKind::UniqueViolation,
-                        _,
-                    ),
-            }) => (),
+            Err(Error::AlreadyExists) => (),
             Ok(_) => panic!("created a text twice"),
             Err(err) => panic!("Unexpected error: {:?}", err),
         }
