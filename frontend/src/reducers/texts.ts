@@ -20,3 +20,9 @@ export const texts = reducerWithInitialState<TextsState>({
       ? { ...state.single, schema: payload.result }
       : state.single,
   }))
+  .case(a.patch.done, (state, payload) => ({
+    ...state,
+    single: state.single
+      ? { ...state.single, text: payload.result }
+      : state.single,
+  }))

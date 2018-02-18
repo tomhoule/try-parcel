@@ -6,6 +6,7 @@ import { Schema, Text } from '../rpc/yacchauyo_pb'
 import { patchSchemaTask } from '../actions/schemas'
 import { fetchTask } from '../actions/texts'
 import { css } from 'emotion'
+import CreateText from './CreateText'
 
 const styles = css({
   ':hover': { color: 'red' },
@@ -36,6 +37,9 @@ export class EditText extends React.Component<Props> {
     return (
       <>
         <h1 className={styles}>{this.props.text.text.title}</h1>
+        <CreateText
+          text={this.props.text.text}
+        />
         <SchemaEditor
           patchSchema={this.props.patchSchema}
           schema={this.props.text.schema}

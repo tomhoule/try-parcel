@@ -10,14 +10,19 @@ interface DispatchProps {
 }
 
 interface OwnProps {
-  params: { textId?: string }
+  text?: proto.Text.AsObject
+  textId?: string
 }
 
 type Props = DispatchProps & OwnProps
 type State = Partial<proto.Text.AsObject>
 
 export class CreateText extends React.Component<Props, State> {
-  state: State = {}
+  constructor(props: Props) {
+    super(props)
+
+    this.state = this.props.text || {}
+  }
 
   submit = () => {
     const payload = new proto.Text()
@@ -26,8 +31,8 @@ export class CreateText extends React.Component<Props, State> {
     payload.setSlug(this.state.slug || '')
     payload.setTitle(this.state.title || '')
 
-    if (this.props.params.textId) {
-      payload.setId(this.props.params.textId)
+    if (this.props.text) {
+      payload.setId(this.props.text.id)
       this.props.patch(payload)
     } else {
       this.props.createText(payload)
@@ -41,7 +46,7 @@ export class CreateText extends React.Component<Props, State> {
        submit={this.submit}
       >
         <label>title</label>
-        <input name='title' type='text' />
+        <input name='title' type='text' value={this.state.title} />
         <label>slug</label>
         <input name='slug' type='text' />
         <label>authors</label>
@@ -61,5 +66,6 @@ export default connect(
   undefined,
   {
     createText: createTask,
+    patch: patchTask,
   },
 )(CreateText)
