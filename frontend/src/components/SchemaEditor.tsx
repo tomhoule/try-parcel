@@ -1,5 +1,21 @@
 import * as React from 'react'
 import { Schema } from '../rpc/yacchauyo_pb'
+import styled from 'react-emotion';
+
+const Error = styled('div')`
+  height: 2em;
+  width: 100%;
+  border: solid 1px rgba(0, 0, 0, .3);
+`
+
+const SaveButton = styled('button')`
+  background-color: magenta;
+  color: white;
+  border: solid 1px white;
+  font-weight: bold;
+  padding: .5rem 1rem;
+  cursor: pointer;
+`
 
 // TODO: Dim common prefixes
 // TODO: API endpoint
@@ -7,6 +23,7 @@ import { Schema } from '../rpc/yacchauyo_pb'
 interface State {
   active: number | null
   paths: string[]
+  saving: boolean
 }
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -82,6 +99,7 @@ export default class SchemaEditor extends React.Component<Props, State> {
     this.state = {
       active: null,
       paths: props.schema.pathsList,
+      saving: false,
     }
   }
 
@@ -116,11 +134,13 @@ export default class SchemaEditor extends React.Component<Props, State> {
     }
   }
 
-  submit = () => {
+  submit = async () => {
+    this.setState({ saving: true, active: null })
     const patch = new Schema()
     patch.setId(this.props.schema.id)
     patch.setPathsList(this.state.paths)
-    this.props.patchSchema(patch)
+    await this.props.patchSchema(patch)
+    this.setState({ saving: false })
   }
 
   validate = (): string | null => {
@@ -139,7 +159,7 @@ export default class SchemaEditor extends React.Component<Props, State> {
     const error = this.validate()
     return (
       <>
-        {error && <div>{error}</div>}
+        <Error>{error}</Error>
         {this.state.paths.map((path, idx) =>
           <Path
             active={idx === this.state.active}
@@ -150,6 +170,12 @@ export default class SchemaEditor extends React.Component<Props, State> {
             path={path}
             setActive={(offset = 0) => this.setState({ active: idx + offset })}
           />)}
+        <div>
+          {error === null &&
+            <SaveButton onClick={this.submit}>
+              {this.state.saving ? 'Saving...' : 'Save' }
+            </SaveButton>}
+        </div>
       </>
     )
   }

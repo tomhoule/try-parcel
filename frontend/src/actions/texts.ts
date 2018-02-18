@@ -1,6 +1,6 @@
 import { actionCreatorFactory } from 'typescript-fsa'
 import * as proto from '../rpc/yacchauyo_pb'
-import { buckle, rpcCall, Err, Ok } from '../prelude'
+import { buckle, rpcCall, Err, Ok, bindThunk } from '../prelude'
 import * as backend from '../rpc/yacchauyo_pb_service'
 import { Code } from 'grpc-web-client/dist/Code'
 import { push } from 'react-router-redux';
@@ -28,7 +28,7 @@ export const createTask = buckle(
     return result.map(res => res.toObject())
   })
 
-export const patchTask = buckle(
+const patchTaskInner = buckle(
   texts.patch,
   async (action) => {
     const result = await rpcCall(backend.Yacchauyo.PatchText, action.payload)
@@ -36,7 +36,9 @@ export const patchTask = buckle(
   },
 )
 
-export const fetchTask = buckle(
+export const patchTask = bindThunk(patchTaskInner)
+
+const fetchTaskInner = buckle(
   texts.fetchSingle,
   async (action, getState, dispatch) => {
     const query = new proto.TextsQuery()
@@ -67,3 +69,5 @@ export const fetchTask = buckle(
     })))
   },
 )
+
+export const fetchTask = bindThunk(fetchTaskInner)
