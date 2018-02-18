@@ -59,11 +59,12 @@ export class Err<Succ, T> implements Result<Succ, T> {
 }
 
 type Buckled<S, D, F> = (start: Action<S>, getState: () => AppState, dispatch: Dispatch<any>) => Promise<Result<D, F>>
+type AsyncWorker<S, D, F> = (s: S) => (dispatch: Dispatch<any>, getState: () => AppState) => Promise<Result<D, F>>
 
 export function buckle<S, D, F>(
   actionCreators: AsyncActionCreators<S, D, F>,
   inner: Buckled<S, D, F>,
-): (s: S) => (dispatch: Dispatch<any>, getState: () => AppState) => Promise<Result<D, F>> {
+): AsyncWorker<S, D, F> {
   return (started) => async (dispatch, getState) => {
     const startedAction = actionCreators.started(started)
     dispatch(startedAction)
@@ -80,6 +81,8 @@ export function buckle<S, D, F>(
     return result
   }
 }
+
+export const bindThunk = <S, D, F>(thunk: AsyncWorker<S, D, F>) => thunk as any as (s: S) => Promise<Result<D, F>>
 
 export function rpcCall<
   Response extends Message,
