@@ -1,3 +1,4 @@
+test('noop')
 // import { call } from 'redux-saga/effects'
 // import { schemas } from '../actions/schemas'
 // import { texts } from '../actions/texts'
