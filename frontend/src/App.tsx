@@ -1,21 +1,43 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { css } from 'react-emotion'
 import * as ReactRedux from 'react-redux'
 import { Route, Switch } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
 import Texts from './components/Texts'
+import CreateText from './components/CreateText'
 import EditText from './components/EditText'
 import { store } from './store'
+
+const appRoot = css({
+  backgroundColor: 'cyan',
+  minHeight: '100vh',
+  position: 'absolute',
+  width: '100%',
+})
+
+const content = css({
+  backgroundColor: 'white',
+  border: 'solid 1px rgba(0, 0, 0, .3)',
+  margin: '5em auto 0',
+  padding: '1em',
+  width: '50em',
+})
 
 export class App extends React.Component<{}, {}> {
   render() {
     return (
-      <BrowserRouter>
-        <Switch>
-          <Route path='/t/:textId/edit' component={EditText} />
-          <Route path='/' component={Texts} />
-        </Switch>
-      </BrowserRouter>
+      <div className={appRoot}>
+        <div className={content}>
+          <BrowserRouter>
+            <Switch>
+              <Route path='/t/:textId/edit' component={EditText} />
+              <Route path='/texts/new' component={CreateText} />
+              <Route path='/' component={Texts} />
+            </Switch>
+          </BrowserRouter>
+        </div>
+      </div>
     )
   }
 }

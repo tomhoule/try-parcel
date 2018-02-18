@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Route, RouteProps, Switch } from 'react-router'
+import { RouteProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import { texts, fetchIndexTask } from '../actions/texts'
 import * as proto from '../rpc/yacchauyo_pb'
-import CreateText from './CreateText'
 import styled from 'react-emotion'
 
 const Entry = styled(Link)`
@@ -44,9 +43,6 @@ export class Texts extends React.Component<Props> {
           <Entry to={`/t/${text.id}/edit`} key={text.id}>
             {text.title}
           </Entry>)}
-        <Switch>
-          <Route path='/texts/new' component={CreateText} />
-        </Switch>
       </div>
     )
   }
