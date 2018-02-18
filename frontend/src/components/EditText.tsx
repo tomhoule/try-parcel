@@ -5,6 +5,12 @@ import SchemaEditor from './SchemaEditor'
 import { Schema, Text } from '../rpc/yacchauyo_pb'
 import { patchSchemaTask } from '../actions/schemas'
 import { fetchTask } from '../actions/texts'
+import { css } from 'emotion'
+
+const styles = css({
+  ':hover': { color: 'red' },
+  'color': 'green',
+ })
 
 interface StateProps {
   text: TextSingle | null
@@ -29,7 +35,7 @@ export class EditText extends React.Component<Props> {
     if (!this.props.text) { return 'loading...' }
     return (
       <>
-        <h1>{this.props.text.text.title}</h1>
+        <h1 className={styles}>{this.props.text.text.title}</h1>
         <SchemaEditor
           patchSchema={this.props.patchSchema}
           schema={this.props.text.schema}
