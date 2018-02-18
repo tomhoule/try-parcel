@@ -9,6 +9,8 @@ service Yacchauyo {
 
   rpc TextSchema (TextsQuery) returns (Schema);
   rpc PatchSchema (Schema) returns (Schema);
+
+  rpc QueryFragments (FragmentsQuery) returns (FragmentsQuery);
 }
 
 message Text {
@@ -33,4 +35,18 @@ message Schema {
   string text_id = 2;
   repeated string paths = 3;
   google.protobuf.Timestamp created_at = 4;
+}
+
+message Fragment {
+  string id = 1;
+  string schema_path = 2;
+  string text_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+  string value = 5;
+}
+
+message FragmentsQuery {
+  repeated Fragment fragments = 1;
+  string prefix = 2;
+  string text_id = 3;
 }
