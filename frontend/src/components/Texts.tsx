@@ -5,6 +5,19 @@ import { Link } from 'react-router-dom'
 import { texts, fetchIndexTask } from '../actions/texts'
 import * as proto from '../rpc/yacchauyo_pb'
 import CreateText from './CreateText'
+import styled from 'react-emotion'
+
+const Entry = styled(Link)`
+  display: block;
+  text-decoration: none;
+  color: black;
+  border: solid 1px rgba(0, 0, 0, .3);
+  padding: .5rem;
+
+  &:hover {
+    background-color: cyan;
+  }
+`
 
 interface DispatchProps {
   fetchIndex: typeof fetchIndexTask
@@ -26,11 +39,11 @@ export class Texts extends React.Component<Props> {
     const loc = this.props.location
     return (
       <div>
-        <Link to='/texts/new'>New texts</Link>
+        <Link to='/texts/new'>New text</Link>
         {this.props.texts.map(text =>
-          <Link to={`/t/${text.id}/edit`} key={text.id}>
+          <Entry to={`/t/${text.id}/edit`} key={text.id}>
             {text.title}
-          </Link>)}
+          </Entry>)}
         <Switch>
           <Route path='/texts/new' component={CreateText} />
         </Switch>

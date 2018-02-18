@@ -6,7 +6,7 @@ import { Texts } from './Texts'
 
 describe('components/<CreateText />', () => {
   const props = {
-    fetchIndex: jest.fn() as any,
+    fetchIndex: jest.fn(),
     texts: [],
   }
   const wrapper = shallow(<Texts {...props} />)
