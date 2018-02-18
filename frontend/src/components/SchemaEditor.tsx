@@ -114,6 +114,8 @@ export default class SchemaEditor extends React.Component<Props, State> {
     })
   }
 
+  canSave = (error: string | null) => !error && !arrayEqual(this.state.paths, this.props.schema.pathsList)
+
   deleteActive = (): void => {
     const { active, paths } = this.state
     if (active === 0 || active === null) { return }
@@ -174,11 +176,7 @@ export default class SchemaEditor extends React.Component<Props, State> {
           />)}
         </div>
         <div>
-          {arrayEqual(this.state.paths, this.props.schema.pathsList) ||
-          <div>
-            There are pending changes
-          </div>}
-          {error === null &&
+          {this.canSave(error) &&
             <SaveButton onClick={this.submit}>
               {this.state.saving ? 'Saving...' : 'Save' }
             </SaveButton>}
