@@ -1,6 +1,7 @@
 import * as React from 'react'
+import styled from 'react-emotion'
 import { Schema } from '../rpc/yacchauyo_pb'
-import styled from 'react-emotion';
+import { arrayEqual } from '../prelude'
 
 const Error = styled('div')`
   height: 2em;
@@ -18,7 +19,6 @@ const SaveButton = styled('button')`
 `
 
 // TODO: Dim common prefixes
-// TODO: API endpoint
 
 interface State {
   active: number | null
@@ -69,6 +69,7 @@ function handleKeyDown(props: PathProps): (event: React.KeyboardEvent<HTMLInputE
     }
 
     if (event.key === 'Backspace' && props.path.trim() === '') {
+      event.preventDefault()
       props.deleteActive()
     }
   }
@@ -160,6 +161,7 @@ export default class SchemaEditor extends React.Component<Props, State> {
     return (
       <>
         <Error>{error}</Error>
+        <div onBlur={() => this.setState({ active: null }) }>
         {this.state.paths.map((path, idx) =>
           <Path
             active={idx === this.state.active}
@@ -170,7 +172,12 @@ export default class SchemaEditor extends React.Component<Props, State> {
             path={path}
             setActive={(offset = 0) => this.setState({ active: idx + offset })}
           />)}
+        </div>
         <div>
+          {arrayEqual(this.state.paths, this.props.schema.pathsList) ||
+          <div>
+            There are pending changes
+          </div>}
           {error === null &&
             <SaveButton onClick={this.submit}>
               {this.state.saving ? 'Saving...' : 'Save' }
