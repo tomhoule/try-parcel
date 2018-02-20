@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { CreateText } from './CreateText'
+import * as proto from '../rpc/yacchauyo_pb'
 
 describe('components/<CreateText />', () => {
   const props = {
@@ -27,10 +28,17 @@ describe('components/<CreateText />', () => {
       test('it calls patch', () => {
         wrapper.setProps({
           params: { textId: 'abc' },
+          patch: jest.fn(),
+          text: { id: 'abcd' },
         })
         wi.submit()
-        const expected = new Text()
-        expect(wi.props.patch).toHaveBeenCalled()
+        const expected = new proto.Text()
+        expected.setAuthors('')
+        expected.setDescription('')
+        expected.setSlug('')
+        expected.setTitle('')
+        expected.setId('abcd')
+        expect(wi.props.patch).toHaveBeenCalledWith(expected)
       })
     })
   })
