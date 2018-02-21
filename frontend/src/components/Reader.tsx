@@ -1,8 +1,9 @@
-import React from 'react'
+import * as React from 'react'
 import { connect } from 'react-redux'
+import * as proto from '../rpc/yacchauyo_pb'
 
 interface StateProps {
-  fragments: Fragment[]
+  fragments: proto.Fragment.AsObject[]
 }
 
 interface DispatchProps {
@@ -23,9 +24,8 @@ export class Reader extends React.Component<Props> {
 
 export default connect<StateProps, DispatchProps, OwnProps, AppState>(
   state => ({
-    fragments: state.
+    fragments: state.texts.single
   }),
   {
-
   }
 )(Reader)
