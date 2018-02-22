@@ -13,8 +13,13 @@ declare global {
     single: TextSingle | null
   }
 
+  interface FragmentsState {
+    query: proto.FragmentsQuery.AsObject
+  }
+
   interface AppState {
     texts: TextsState
+    fragments: FragmentsState
   }
 
   interface RpcFailure {

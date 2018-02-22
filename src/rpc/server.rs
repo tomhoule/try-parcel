@@ -3,7 +3,7 @@ use diesel;
 use r2d2;
 use diesel::prelude::*;
 use configure::Configure;
-use rpc::yacchauyo::{Schema, Text, Texts, TextsQuery};
+use rpc::yacchauyo::{FragmentsQuery, Schema, Text, Texts, TextsQuery};
 use models;
 use models::texts::Text as TextModel;
 use error::Error;
@@ -57,6 +57,11 @@ impl Server {
     pub fn patch_schema(&self, req: Schema) -> Result<Schema, Error> {
         let conn = self.pool.get()?;
         Ok(models::schemas::SchemaPatch::from(req).save(&conn)?.into())
+    }
+
+    pub fn query_fragments(&self, req: FragmentsQuery) -> Result<FragmentsQuery, Error> {
+        let conn = self.pool.get()?;
+        Ok(req)
     }
 }
 
@@ -194,6 +199,15 @@ mod tests {
         let res = Server::new().patch_schema(req).unwrap();
 
         assert_eq!(res.paths.to_vec(), &["tomato"]);
+    }
+
+    #[test]
+    fn query_fragments_works() {
+        let conn = db_setup();
+        let mut req = FragmentsQuery::new();
+        let res = Server::new().query_fragments(req.clone()).unwrap();
+
+        assert_eq!(res, req);
     }
 
     fn create_text(conn: &PgConnection, slug: &str) -> models::texts::Text {
