@@ -69,3 +69,5 @@ const fetchTaskInner = buckle(
     })))
   },
 )
+
+export const fetchTask = bindThunk(fetchTaskInner)
