@@ -11,24 +11,34 @@ describe('actions/fragments', () => {
     it('works', async () => {
       const client = jest.fn()
       const response = new FragmentsQuery()
+      const put = jest.fn()
       response.setPrefix('meow')
       client.mockReturnValueOnce(Promise.resolve(new Ok(response)))
 
-      const result = await actions.queryTaskInner(client)(action.payload)(jest.fn(), jest.fn())
+      const result = await actions.queryTask(client)(action.payload)(put, jest.fn())
 
       expect(client).toHaveBeenCalledWith(Yacchauyo.QueryFragments, action.payload)
       expect(result).toEqual(new Ok(response.toObject()))
+      expect(put).toHaveBeenCalledWith(actions.fragments.query.done({
+        params: action.payload,
+        result: response.toObject(),
+      }))
     })
 
     it('can also fail', async () => {
       const client = jest.fn()
-      const response = { status: Code.NotFound }
+      const put = jest.fn()
+      const response: any = { status: Code.NotFound }
       client.mockReturnValueOnce(Promise.resolve(new Err(response)))
 
-      const result = await actions.queryTaskInner(client)(action.payload)(jest.fn(), jest.fn())
+      const result = await actions.queryTask(client)(action.payload)(put, jest.fn())
 
       expect(client).toHaveBeenCalledWith(Yacchauyo.QueryFragments, action.payload)
       expect(result).toEqual(new Err(response))
+      expect(put).toHaveBeenCalledWith(actions.fragments.query.failed({
+        error: response,
+        params: action.payload,
+      }))
     })
   })
 })

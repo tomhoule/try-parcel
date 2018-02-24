@@ -1,8 +1,12 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
+import { RouteComponentProps } from 'react-router'
 import Form from './Form'
 import { createTask, patchTask } from '../actions/texts'
 import * as proto from '../rpc/yacchauyo_pb'
+import { Result } from '../prelude'
+
+interface StateProps {}
 
 interface DispatchProps {
   createText: typeof createTask
@@ -11,40 +15,47 @@ interface DispatchProps {
 
 interface OwnProps {
   text?: proto.Text.AsObject
-  textId?: string
 }
 
 type Props = DispatchProps & OwnProps
-type State = Partial<proto.Text.AsObject>
+type State = Partial<proto.Text.AsObject> & { err: RpcFailure | null }
 
 export class CreateText extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
-    this.state = this.props.text || {}
+    this.state = { ...(this.props.text || {}), err: null }
   }
 
-  submit = () => {
+  submit = async () => {
     const payload = new proto.Text()
     payload.setAuthors(this.state.authors || '')
     payload.setDescription(this.state.description || '')
     payload.setSlug(this.state.slug || '')
     payload.setTitle(this.state.title || '')
 
+    let promise: Promise<Result<proto.Text.AsObject, RpcFailure>>
+
     if (this.props.text) {
       payload.setId(this.props.text.id)
-      this.props.patch(payload)
+      promise = this.props.patch(payload)
     } else {
-      this.props.createText(payload)
+      promise = this.props.createText(payload)
     }
+
+    const result = await promise
+
+    result.mapErr(err => this.setState({ err }))
   }
 
   render() {
+    const { err } = this.state
     return (
       <Form
        onChange={(change: any) => this.setState(change)}
        submit={this.submit}
       >
+        {err && <h2>{err.statusMessage}</h2>}
         <label>title</label>
         <input name='title' type='text' value={this.state.title} />
         <label>slug</label>
@@ -62,7 +73,7 @@ export class CreateText extends React.Component<Props, State> {
   }
 }
 
-export default connect(
+export default connect<StateProps, DispatchProps, OwnProps, AppState>(
   undefined,
   {
     createText: createTask,

@@ -10,6 +10,7 @@
       "max-classes-per-file": false,
       "no-shadowed-variable": false,
       "member-access": false,
+      "no-empty-interface": false,
       "ordered-imports": false,
       "quotemark": [true, "single"],
       "semicolon": [true, "never"]

@@ -9,12 +9,10 @@ export const fragments = {
   query: factory.async<proto.FragmentsQuery, proto.FragmentsQuery.AsObject, RpcFailure>('QUERY'),
 }
 
-export const queryTaskInner = (call: typeof rpcCall) => buckle(
+export const queryTask = (call: typeof rpcCall) => buckle(
   fragments.query,
   async (action, getState, dispatch) => {
     const res = await call(Yacchauyo.QueryFragments, action.payload)
     return res.map(result => result.toObject())
   },
 )
-
-export const queryTask = bindThunk(queryTaskInner(rpcCall))

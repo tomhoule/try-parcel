@@ -10,14 +10,14 @@ import EditText from './components/EditText'
 import { store } from './store'
 
 const appRoot = css({
-  backgroundColor: 'cyan',
+  backgroundColor: 'rgb(50, 80, 70)',
   minHeight: '100vh',
   position: 'absolute',
   width: '100%',
 })
 
 const content = css({
-  backgroundColor: 'white',
+  backgroundColor: 'rgb(240, 240, 240)',
   border: 'solid 1px rgba(0, 0, 0, .3)',
   margin: '5em auto 0',
   padding: '1em',
@@ -33,7 +33,7 @@ export class App extends React.Component<{}, {}> {
             <Switch>
               <Route path='/t/:textId/edit' component={EditText} />
               <Route path='/texts/new' component={CreateText} />
-              <Route path='/' component={Texts} />
+              <Route path='/' component={Texts} exact />
             </Switch>
           </BrowserRouter>
         </div>

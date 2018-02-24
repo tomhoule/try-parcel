@@ -2,11 +2,11 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { CreateText } from './CreateText'
 import * as proto from '../rpc/yacchauyo_pb'
+import { Ok } from '../prelude'
 
 describe('components/<CreateText />', () => {
   const props = {
     createText: jest.fn(),
-    params: {},
     patch: jest.fn(),
   }
   const wrapper = shallow(<CreateText {...props} />)
@@ -19,6 +19,10 @@ describe('components/<CreateText />', () => {
   describe('submit', () => {
     describe('when creating a text', () => {
       test('it calls createText', () => {
+        const rpcResult = Promise.resolve(new Ok(new Text()))
+        wrapper.setProps({
+          createText: jest.fn().mockReturnValueOnce(rpcResult),
+        })
         wi.submit()
         expect(wi.props.createText).toHaveBeenCalled()
       })
@@ -27,7 +31,6 @@ describe('components/<CreateText />', () => {
     describe('when editing a text', () => {
       test('it calls patch', () => {
         wrapper.setProps({
-          params: { textId: 'abc' },
           patch: jest.fn(),
           text: { id: 'abcd' },
         })

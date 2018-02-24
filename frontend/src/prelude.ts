@@ -23,7 +23,7 @@ export interface Result<Success, Failure> {
 }
 
 export class Ok<T, Error> implements Result<T, Error> {
-  value: T
+  private readonly value: T
 
   constructor(value: T) { this.value = value }
 
@@ -42,7 +42,7 @@ export class Ok<T, Error> implements Result<T, Error> {
 
 // tslint:disable-next-line:max-classes-per-file
 export class Err<Succ, T> implements Result<Succ, T> {
-  value: T
+  private readonly value: T
 
   constructor(value: T) { this.value = value }
   isOk() { return false }
@@ -58,8 +58,10 @@ export class Err<Succ, T> implements Result<Succ, T> {
   unwrapOr(fallback: Succ): Succ { return fallback }
 }
 
-type Buckled<S, D, F> = (start: Action<S>, getState: () => AppState, dispatch: Dispatch<any>) => Promise<Result<D, F>>
-type AsyncWorker<S, D, F> = (s: S) => (dispatch: Dispatch<any>, getState: () => AppState) => Promise<Result<D, F>>
+type Buckled<S, D, F> =
+ (start: Action<S>, dispatch: Dispatch<AppState>, getState: () => AppState) => Promise<Result<D, F>>
+type AsyncWorker<S, D, F> =
+  (s: S) => (dispatch: Dispatch<AppState>, getState: () => AppState) => Promise<Result<D, F>>
 
 export function buckle<S, D, F>(
   actionCreators: AsyncActionCreators<S, D, F>,
@@ -68,7 +70,7 @@ export function buckle<S, D, F>(
   return (started) => async (dispatch, getState) => {
     const startedAction = actionCreators.started(started)
     dispatch(startedAction)
-    const result = await inner(startedAction, getState, dispatch)
+    const result = await inner(startedAction, dispatch, getState)
     const mapped = result
       .map(succ => dispatch(actionCreators.done({
         params: started,

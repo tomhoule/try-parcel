@@ -3,7 +3,7 @@ import * as proto from '../rpc/yacchauyo_pb'
 import { buckle, rpcCall, Err, Ok, bindThunk } from '../prelude'
 import * as backend from '../rpc/yacchauyo_pb_service'
 import { Code } from 'grpc-web-client/dist/Code'
-import { push } from 'react-router-redux';
+import { push } from 'react-router-redux'
 
 const factory = actionCreatorFactory('texts')
 
@@ -21,12 +21,14 @@ export const fetchIndexTask = buckle(
     return result.map(res => res.toObject())
   })
 
-export const createTask = buckle(
+export const createTaskInner = (client: typeof rpcCall) => buckle(
   texts.create,
-  async (action) => {
-    const result = await rpcCall(backend.Yacchauyo.CreateText, action.payload)
+  async (action, put: any, gs: any) => {
+    const result = await client(backend.Yacchauyo.CreateText, action.payload)
     return result.map(res => res.toObject())
   })
+
+export const createTask = bindThunk(createTaskInner(rpcCall))
 
 const patchTaskInner = buckle(
   texts.patch,
@@ -40,7 +42,7 @@ export const patchTask = bindThunk(patchTaskInner)
 
 const fetchTaskInner = buckle(
   texts.fetchSingle,
-  async (action, getState, dispatch) => {
+  async (action, put) => {
     const query = new proto.TextsQuery()
     query.setId(action.payload)
     const results = await Promise.all([
@@ -54,11 +56,11 @@ const fetchTaskInner = buckle(
         ? new Ok(text)
         : new Err({
             status: Code.NotFound,
-            statusMessage:  'not found'
-          })
+            statusMessage:  'not found',
+          }),
       ).mapErr(err => {
-        if (err.status == Code.NotFound) {
-          dispatch(push('/'))
+        if (err.status === Code.NotFound) {
+          put(push('/'))
         }
         return err
       })
