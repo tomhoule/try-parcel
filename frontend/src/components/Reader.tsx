@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from 'react-router'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import * as proto from '../rpc/yacchauyo_pb'
 import * as actions from '../actions/fragments'
@@ -27,12 +28,9 @@ export class Reader extends React.Component<Props> {
       this.props.fetchText(this.props.match.params.textId)
     }
 
-    const path = this.path()
-    if (path) {
-      const query = new proto.FragmentsQuery()
-      query.setPrefix(path)
-      this.props.query(query)
-    }
+    const query = new proto.FragmentsQuery()
+    query.setPrefix(this.path() || '')
+    this.props.query(query)
   }
 
   path = (): string | null => {
@@ -43,7 +41,14 @@ export class Reader extends React.Component<Props> {
   render() {
     const { fragments, text } = this.props
     if (!fragments || !text) { return 'loading...' }
-    return (<div />)
+    return (
+      <>
+        <Link to={`${this.props.location.pathname}/edit`}>edit</Link>
+        <h1>{text.text.title}</h1>
+        {text.schema.pathsList.map(path =>
+        <div key={path}>{path}</div>)}
+      </>
+    )
   }
 }
 

@@ -10,6 +10,7 @@ describe('components/<Reader />', () => {
         textId: 'zzz',
       },
     },
+    query: jest.fn(),
     text: null,
   } as any
   const wrapper = shallow(<Reader {...props} />)

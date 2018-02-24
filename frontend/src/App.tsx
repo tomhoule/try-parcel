@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom'
 import Texts from './components/Texts'
 import CreateText from './components/CreateText'
 import EditText from './components/EditText'
+import Reader from './components/Reader'
 import { store } from './store'
 
 const appRoot = css({
@@ -32,6 +33,7 @@ export class App extends React.Component<{}, {}> {
           <BrowserRouter>
             <Switch>
               <Route path='/t/:textId/edit' component={EditText} />
+              <Route path='/t/:textId' component={Reader} />
               <Route path='/texts/new' component={CreateText} />
               <Route path='/' component={Texts} exact />
             </Switch>

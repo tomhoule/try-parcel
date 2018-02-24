@@ -14,7 +14,7 @@ declare global {
   }
 
   interface FragmentsState {
-    query: proto.FragmentsQuery.AsObject
+    query: proto.FragmentsQuery.AsObject | null
   }
 
   interface AppState {
