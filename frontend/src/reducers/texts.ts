@@ -10,13 +10,6 @@ export const texts = reducerWithInitialState<TextsState>({
   ...state,
   index: payload.result,
 }))
-  .case(a.receive, (state, payload) => ({
-    ...state,
-    single: state.single ? {
-      ...state.single,
-      text: payload.toObject(),
-    } : state.single,
-  }))
   .case(a.fetchSingle.done, (state, payload) => ({
     ...state,
     single: payload.result,

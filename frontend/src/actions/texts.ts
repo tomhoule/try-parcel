@@ -1,6 +1,6 @@
 import { actionCreatorFactory } from 'typescript-fsa'
 import * as proto from '../rpc/yacchauyo_pb'
-import { buckle, rpcCall, Err, Ok, bindThunk } from '../prelude'
+import { buckle, rpcCall, Err, Ok, bindThunk, effects } from '../prelude'
 import * as backend from '../rpc/yacchauyo_pb_service'
 import { Code } from 'grpc-web-client/dist/Code'
 
@@ -11,7 +11,6 @@ export const texts = {
   fetchIndex: factory.async<proto.TextsQuery, proto.Texts.AsObject, RpcFailure>('FETCH_INDEX'),
   fetchSingle: factory.async<string, TextSingle, RpcFailure>('FETCH_SINGLE'),
   patch: factory.async<proto.Text, proto.Text.AsObject, RpcFailure>('PATCH'),
-  receive: factory<proto.Text>('RECEIVE'),
 }
 
 export const fetchIndexTask = buckle(
@@ -21,14 +20,14 @@ export const fetchIndexTask = buckle(
     return result.map(res => res.toObject())
   })
 
-export const createTaskInner = (client: typeof rpcCall) => buckle(
+export const createTaskInner = (eff: typeof effects) => buckle(
   texts.create,
   async (action, put: any, gs: any) => {
-    const result = await client(backend.Yacchauyo.CreateText, action.payload)
+    const result = await eff.rpcCall(backend.Yacchauyo.CreateText, action.payload)
     return result.map(res => res.toObject())
   })
 
-export const createTask = bindThunk(createTaskInner(rpcCall))
+export const createTask = bindThunk(createTaskInner(effects))
 
 const patchTaskInner = buckle(
   texts.patch,

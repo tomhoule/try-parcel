@@ -6,21 +6,21 @@ import * as proto from '../rpc/yacchauyo_pb'
 import { Result, rpcCall } from '../prelude'
 import { Yacchauyo } from '../rpc/yacchauyo_pb_service'
 import { TextForm } from './TextForm'
+import * as texts from '../actions/texts'
+
+interface DispatchProps {
+  create: typeof texts.createTask
+}
 
 interface OwnProps extends RouteComponentProps<{}> {}
 
-type Props = OwnProps
+type Props = DispatchProps & OwnProps
 
 interface State {}
 
 export class CreateText extends React.Component<Props, State> {
-  submit = async (text: proto.Text): Promise<Result<proto.Text, RpcFailure>> => {
-    const res = await rpcCall(Yacchauyo.CreateText, text)
-    return res
-      .map(text => {
-        this.props.history.push('/')
-        return text
-      })
+  submit = (text: proto.Text): Promise<Result<proto.Text.AsObject, RpcFailure>> => {
+    return this.props.create(text)
   }
 
   render() {
@@ -30,4 +30,9 @@ export class CreateText extends React.Component<Props, State> {
   }
 }
 
-export default CreateText
+export default connect<{}, DispatchProps, OwnProps, AppState>(
+  undefined,
+  {
+    create: texts.createTask,
+  },
+)(CreateText)

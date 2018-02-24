@@ -6,6 +6,7 @@ import { Ok } from '../prelude'
 
 describe('components/<CreateText />', () => {
   const props = {
+    create: jest.fn(),
     history: {} as any,
     location: {} as any,
     match: {} as any,
@@ -18,8 +19,12 @@ describe('components/<CreateText />', () => {
   })
 
   describe('submit', () => {
-    test('it calls CreateText', () => {
-      expect(true).toBe(false)
+    test('it calls create', () => {
+      wrapper.setProps({ create: jest.fn() })
+      const text = new proto.Text()
+      text.setTitle('meow')
+      wi.submit(text)
+      expect(wi.props.create).toHaveBeenCalledWith(text)
     })
   })
 })

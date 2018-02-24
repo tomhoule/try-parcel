@@ -106,6 +106,14 @@ export function rpcCall<
   }))
 }
 
+export const effects = {
+  rpcCall,
+}
+
+export const mockEffects: typeof effects = {
+  rpcCall: () => Promise.resolve(new Err({ statusMessage: 'Mock effect', status: Code.Unimplemented })),
+}
+
 type CancelFunction = () => void
 
 // tslint:disable-next-line:max-classes-per-file

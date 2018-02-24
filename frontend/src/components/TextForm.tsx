@@ -6,7 +6,7 @@ import * as proto from '../rpc/yacchauyo_pb'
 import { Result } from '../prelude'
 
 interface OwnProps {
-  submit: (text: proto.Text) => Promise<Result<proto.Text, RpcFailure>>
+  submit: (text: proto.Text) => Promise<Result<proto.Text.AsObject, RpcFailure>>
   text?: proto.Text.AsObject
 }
 

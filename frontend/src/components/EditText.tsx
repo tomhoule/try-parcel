@@ -5,7 +5,7 @@ import { css } from 'emotion'
 import SchemaEditor from './SchemaEditor'
 import { Schema, Text } from '../rpc/yacchauyo_pb'
 import { patchSchemaTask } from '../actions/schemas'
-import { fetchTask, texts } from '../actions/texts'
+import { fetchTask, texts, patchTask } from '../actions/texts'
 import { Yacchauyo } from '../rpc/yacchauyo_pb_service'
 import { rpcCall, Result } from '../prelude'
 import TextForm from './TextForm'
@@ -22,7 +22,7 @@ interface StateProps {
 interface DispatchProps {
   fetchText: typeof fetchTask
   patchSchema: typeof patchSchemaTask
-  receiveText: typeof texts.receive
+  patchText: typeof patchTask
 }
 
 interface OwnProps extends RouteComponentProps<{ textId: string }> {
@@ -35,13 +35,8 @@ export class EditText extends React.Component<Props> {
     this.props.fetchText(this.props.match.params.textId)
   }
 
-  patchText = async (text: Text): Promise<Result<Text, RpcFailure>> => {
-    const res = await rpcCall(Yacchauyo.PatchText, text)
-    return res
-      .map(text => {
-        this.props.receiveText(text)
-        return text
-      })
+  patchText = async (text: Text): Promise<Result<Text.AsObject, RpcFailure>> => {
+    return this.props.patchText(text)
   }
 
   render() {
@@ -69,6 +64,6 @@ export default connect<StateProps, DispatchProps, OwnProps, AppState>(
   {
     fetchText: fetchTask,
     patchSchema: patchSchemaTask,
-    receiveText: texts.receive,
+    patchText: patchTask,
   },
 )(EditText)
