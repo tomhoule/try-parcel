@@ -3,7 +3,6 @@ import * as proto from '../rpc/yacchauyo_pb'
 import { buckle, rpcCall, Err, Ok, bindThunk } from '../prelude'
 import * as backend from '../rpc/yacchauyo_pb_service'
 import { Code } from 'grpc-web-client/dist/Code'
-import { push } from 'react-router-redux'
 
 const factory = actionCreatorFactory('texts')
 
@@ -60,7 +59,7 @@ const fetchTaskInner = buckle(
           }),
       ).mapErr(err => {
         if (err.status === Code.NotFound) {
-          put(push('/'))
+          // put(push('/'))
         }
         return err
       })

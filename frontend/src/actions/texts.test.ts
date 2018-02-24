@@ -1,7 +1,6 @@
 import * as actions from './texts'
 import { Text } from '../rpc/yacchauyo_pb'
 import { Ok } from '../prelude'
-import { push } from 'react-router-redux'
 
 describe('actions/texts', () => {
   describe('createTask', () => {
