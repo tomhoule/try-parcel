@@ -1,12 +1,14 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { RouteProps, RouteComponentProps } from 'react-router'
+import { css } from 'emotion'
 import SchemaEditor from './SchemaEditor'
 import { Schema, Text } from '../rpc/yacchauyo_pb'
 import { patchSchemaTask } from '../actions/schemas'
-import { fetchTask } from '../actions/texts'
-import { css } from 'emotion'
-import CreateText from './CreateText'
+import { fetchTask, texts } from '../actions/texts'
+import { Yacchauyo } from '../rpc/yacchauyo_pb_service'
+import { rpcCall, Result } from '../prelude'
+import TextForm from './TextForm'
 
 const styles = css({
   ':hover': { color: 'red' },
@@ -20,6 +22,7 @@ interface StateProps {
 interface DispatchProps {
   fetchText: typeof fetchTask
   patchSchema: typeof patchSchemaTask
+  receiveText: typeof texts.receive
 }
 
 interface OwnProps extends RouteComponentProps<{ textId: string }> {
@@ -32,13 +35,23 @@ export class EditText extends React.Component<Props> {
     this.props.fetchText(this.props.match.params.textId)
   }
 
+  patchText = async (text: Text): Promise<Result<Text, RpcFailure>> => {
+    const res = await rpcCall(Yacchauyo.PatchText, text)
+    return res
+      .map(text => {
+        this.props.receiveText(text)
+        return text
+      })
+  }
+
   render() {
     if (!this.props.text) { return 'loading...' }
     return (
       <>
         <h1 className={styles}>{this.props.text.text.title}</h1>
-        <CreateText
+        <TextForm
           text={this.props.text.text}
+          submit={this.patchText}
         />
         <SchemaEditor
           patchSchema={this.props.patchSchema}
@@ -56,5 +69,6 @@ export default connect<StateProps, DispatchProps, OwnProps, AppState>(
   {
     fetchText: fetchTask,
     patchSchema: patchSchemaTask,
+    receiveText: texts.receive,
   },
 )(EditText)

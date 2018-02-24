@@ -11,6 +11,7 @@ export const texts = {
   fetchIndex: factory.async<proto.TextsQuery, proto.Texts.AsObject, RpcFailure>('FETCH_INDEX'),
   fetchSingle: factory.async<string, TextSingle, RpcFailure>('FETCH_SINGLE'),
   patch: factory.async<proto.Text, proto.Text.AsObject, RpcFailure>('PATCH'),
+  receive: factory<proto.Text>('RECEIVE'),
 }
 
 export const fetchIndexTask = buckle(

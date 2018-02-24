@@ -6,8 +6,9 @@ import { Ok } from '../prelude'
 
 describe('components/<CreateText />', () => {
   const props = {
-    createText: jest.fn(),
-    patch: jest.fn(),
+    history: {} as any,
+    location: {} as any,
+    match: {} as any,
   }
   const wrapper = shallow(<CreateText {...props} />)
   const wi: any = wrapper.instance()
@@ -17,32 +18,8 @@ describe('components/<CreateText />', () => {
   })
 
   describe('submit', () => {
-    describe('when creating a text', () => {
-      test('it calls createText', () => {
-        const rpcResult = Promise.resolve(new Ok(new Text()))
-        wrapper.setProps({
-          createText: jest.fn().mockReturnValueOnce(rpcResult),
-        })
-        wi.submit()
-        expect(wi.props.createText).toHaveBeenCalled()
-      })
-    })
-
-    describe('when editing a text', () => {
-      test('it calls patch', () => {
-        wrapper.setProps({
-          patch: jest.fn(),
-          text: { id: 'abcd' },
-        })
-        wi.submit()
-        const expected = new proto.Text()
-        expected.setAuthors('')
-        expected.setDescription('')
-        expected.setSlug('')
-        expected.setTitle('')
-        expected.setId('abcd')
-        expect(wi.props.patch).toHaveBeenCalledWith(expected)
-      })
+    test('it calls CreateText', () => {
+      expect(true).toBe(false)
     })
   })
 })
