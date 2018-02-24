@@ -36,3 +36,11 @@ watch:
     --clear \
     --exts html,rs \
     cargo run
+
+tmux-setup:
+  sudo systemctl start postgresql
+  tmux split-window just start-proxy
+  tmux split-window cargo run rpc
+  tmux new-window -n frontend -c `pwd`/frontend yarn start
+  tmux split-window -h -c `pwd`/frontend -t frontend yarn run test --watch
+  tmux split-window -c `pwd`/frontend -t frontend yarn run typecheck
