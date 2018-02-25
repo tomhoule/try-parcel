@@ -86,12 +86,12 @@ const Path = (props: PathProps) =>
     />
     : <div onClick={() => props.setActive()}>{props.path}</div>
 
-interface StateProps {
+interface OwnProps {
   patchSchema: (patch: Schema) => void
   schema: Schema.AsObject
 }
 
-type Props = StateProps
+type Props = OwnProps
 
 export default class SchemaEditor extends React.Component<Props, State> {
   constructor(props: Props) {

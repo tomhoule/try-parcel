@@ -40,17 +40,18 @@ export class EditText extends React.Component<Props> {
   }
 
   render() {
-    if (!this.props.text) { return 'loading...' }
+    const { text, match } = this.props
+    if (!text || text.text.id !== match.params.textId) { return 'loading...' }
     return (
       <>
-        <h1 className={styles}>{this.props.text.text.title}</h1>
+        <h1 className={styles}>{text.text.title}</h1>
         <TextForm
-          text={this.props.text.text}
+          text={text.text}
           submit={this.patchText}
         />
         <SchemaEditor
           patchSchema={this.props.patchSchema}
-          schema={this.props.text.schema}
+          schema={text.schema}
         />
       </>
     )
