@@ -36,18 +36,38 @@ export class TextForm extends React.Component<Props, State> {
     const { err } = this.state
     return (
       <Form
-       onChange={(change: any) => this.setState(change)}
-       submit={this.submit}
+        onChange={(change: any) => this.setState(change)}
+        submit={this.submit}
       >
         {err && <h2>{err.statusMessage}</h2>}
         <label>title</label>
-        <input name='title' type='text' value={this.state.title} />
+        <input
+          name='title'
+          onChange={(event => this.setState({ [event.target.name]: event.target.value } as any))}
+          type='text'
+          value={this.state.title}
+        />
         <label>slug</label>
-        <input name='slug' type='text' />
+        <input
+          name='slug'
+          onChange={(event => this.setState({ [event.target.name]: event.target.value } as any))}
+          type='text'
+          value={this.state.slug}
+        />
         <label>authors</label>
-        <input name='authors' type='text' />
+        <input
+          name='authors'
+          onChange={(event => this.setState({ [event.target.name]: event.target.value } as any))}
+          type='text'
+          value={this.state.authors}
+        />
         <label>description</label>
-        <input name='description' type='text' />
+        <input
+          name='description'
+          onChange={(event => this.setState({ [event.target.name]: event.target.value } as any))}
+          type='text'
+          value={this.state.description}
+        />
 
         <br />
         <div>
