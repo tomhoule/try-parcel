@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "jsx": "react",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "plugins": [
+            { "name": "tslint-language-service",
+              "alwaysShowRuleFailuresAsWarnings": true
+            }
+        ],
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "strict": true,
+        "target": "es2016"
+    }
+}

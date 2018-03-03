@@ -11,6 +11,12 @@ codegen:
       --ts_out=service=true:frontend/src/rpc \
       -I ./proto \
       proto/*.proto
+    protoc \
+      --plugin=protoc-gen-ts=./frontend/node_modules/.bin/protoc-gen-ts \
+      --js_out=import_style=commonjs,binary:less/src/rpc \
+      --ts_out=service=true:less/src/rpc \
+      -I ./proto \
+      proto/*.proto
 
 start-proxy:
   grpcwebproxy \
