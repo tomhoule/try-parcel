@@ -21,6 +21,8 @@ serde_json = "1.0.9"
 askama = { git = "https://github.com/djc/askama", features = ["with-rocket"] }
 rocket_contrib = "0.3"
 structopt = "0.2.2"
+juniper = "0.9.2"
+juniper_rocket = "*"
 
 [dependencies.diesel]
 version = "1.1"

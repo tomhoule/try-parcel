@@ -8,6 +8,8 @@ use structopt::StructOpt;
 #[derive(StructOpt, Debug)]
 #[structopt(name = "server")]
 enum Command {
+    #[structopt(name = "gql")]
+    Gql,
     #[structopt(name = "rpc")]
     Rpc,
     #[structopt(name = "web")]
@@ -22,6 +24,9 @@ fn main() {
         }
         Command::Web => {
             yacchauyo::start_web();
+        }
+        Command::Gql => {
+            yacchauyo::start_gql();
         }
     }
 }

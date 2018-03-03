@@ -13,6 +13,9 @@ extern crate dotenv;
 extern crate failure;
 extern crate futures;
 extern crate grpcio;
+#[macro_use]
+extern crate juniper;
+extern crate juniper_rocket;
 extern crate protobuf;
 extern crate r2d2;
 extern crate rocket;
@@ -30,6 +33,7 @@ extern crate uuid;
 pub mod config;
 pub mod db_schema;
 pub mod error;
+pub mod gql;
 pub mod models;
 pub mod rpc;
 #[cfg(test)]
@@ -43,4 +47,8 @@ pub fn start_rpc() {
 
 pub fn start_web() {
     web::start::start().launch();
+}
+
+pub fn start_gql() {
+    gql::start();
 }
