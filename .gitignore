@@ -5,7 +5,7 @@
 /frontend/.cache
 /frontend/dist
 /frontend/node_modules
-/node_modules
+node_modules
 /static
 /target/
 yarn-error.log

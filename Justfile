@@ -12,10 +12,13 @@ codegen:
       -I ./proto \
       proto/*.proto
     protoc \
-      --plugin=protoc-gen-ts=./frontend/node_modules/.bin/protoc-gen-ts \
-      --js_out=import_style=commonjs,binary:less/src/rpc \
-      --ts_out=service=true:less/src/rpc \
+      --js_out=import_style=commonjs,binary:gql-proxy/src/rpc \
       -I ./proto \
+      proto/*.proto
+    grpc_tools_node_protoc \
+      --js_out=import_style=commonjs,binary:gql-proxy/src/rpc \
+      --grpc_out=gql-proxy/src/rpc \
+      --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` \
       proto/*.proto
 
 start-proxy:
