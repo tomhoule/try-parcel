@@ -1,34 +1,30 @@
 const grpc = require('grpc')
-const services = grpc.load('./yacchauyo.proto')
+const Yacchauyo = grpc.load('./yacchauyo.proto')
 
-const YacchauyoStub = new services.Yacchauyo(process.env.YACCHAUYO_BACKEND_URL, grpc.credentials.createInsecure())
+const YacchauyoStub = new Yacchauyo.Yacchauyo(process.env.YACCHAUYO_BACKEND_URL, grpc.credentials.createInsecure())
+
+console.log(YacchauyoStub.TextsIndex)
 
 module.exports = {
   Query: {
     yacchauyo: () => ({
-      textsIndex: async ({ texts_query: req }) => {
-        const res = await new Promise((resolve) => YacchauyoStub.TextsIndex({...req}, (err, res) => resolve(res)))
-        return res
+      textsIndex: ({ texts_query: req }) => {
+        return new Promise((resolve, reject) => YacchauyoStub.TextsIndex({...req}, (err, res) => err ? reject(err) : resolve(res)))
       },
-      createText: async (req) => {
-        const res = await YacchauyoStub.call(services.Yacchauyo.CreateText, req)
-        return res.toJson()
+      createText: ({ text: req }) => {
+        return new Promise((resolve, reject) => YacchauyoStub.CreateText({...req}, (err, res) => err ? reject(err) : resolve(res)))
       },
-      patchText: async (req) => {
-        const res = await YacchauyoStub.call(services.Yacchauyo.PatchText, req)
-        return res.toJson()
+      patchText: ({ text: req }) => {
+        return new Promise((resolve, reject) => YacchauyoStub.PatchText({...req}, (err, res) => err ? reject(err) : resolve(res)))
       },
-      textSchema: async (req) => {
-        const res = await YacchauyoStub.call(services.Yacchauyo.TextSchema, req)
-        return res.toJson()
+      textSchema: ({ texts_query: req }) => {
+        return new Promise((resolve, reject) => YacchauyoStub.TextSchema({...req}, (err, res) => err ? reject(err) : resolve(res)))
       },
-      patchSchema: async (req) => {
-        const res = await YacchauyoStub.call(services.Yacchauyo.PatchSchema, req)
-        return res.toJson()
+      patchSchema: ({ schema: req }) => {
+        return new Promise((resolve, reject) => YacchauyoStub.PatchSchema({...req}, (err, res) => err ? reject(err) : resolve(res)))
       },
-      queryFragments: async (req) => {
-        const res = await YacchauyoStub.call(services.Yacchauyo.QueryFragments, req)
-        return res.toJson()
+      queryFragments: ({ fragments_query: req }) => {
+        return new Promise((resolve, reject) => YacchauyoStub.QueryFragments({...req}, (err, res) => err ? reject(err) : resolve(res)))
       },
     }),
   },

@@ -299,8 +299,7 @@ type Query {
 }
 `
 
-module.exports = {
-  all: [
+module.exports = [
   GoogleProtobufTimestamp,
   GoogleProtobufTimestampInput,
   Text,
@@ -317,5 +316,4 @@ module.exports = {
   FragmentsQueryInput,
   Yacchauyo,
   Query,
-  ]
-}
+]
