@@ -1,0 +1,8 @@
+codegen:
+    protoc \
+      --plugin=protoc-gen-apollo=`which protoc-gen-apollo` \
+      --apollo_out=. \
+      -I ../proto \
+      ../proto/*.proto
+    cp ../proto/*.proto .
+
